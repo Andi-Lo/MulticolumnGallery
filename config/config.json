@@ -1,0 +1,14 @@
+{
+	"your_image_directory_path":"assets/images/",
+	"your_thumbnail_directory_path":"assets/thumbs/",
+	"number_of_columns":"5",
+	"thumbnail_width":"300",
+	"space_between_pictures":"10",
+	"margin_left":"10",
+	"margin_left_hd":"180",
+	"margin_top":"70",
+	"margin_right":"300",
+	"center_fifth_column":"yes",
+	"resize_columns":"yes",
+	"fade_in_pictures":"yes"
+}
