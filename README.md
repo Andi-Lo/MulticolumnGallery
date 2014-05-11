@@ -49,8 +49,8 @@ Customize your gallery through the config file placed in /config/config.json
 Add Images and Thumbnail into the appropriate folders:  
 * Image files should be 1600*1200 to increase performance.
 * Supported image formats are png, jpg, gif.
-* thumbnails have to be named thumb_imagename.
-* * e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg
+* thumbnails can be named thumb_imagename or need to have the same imagename.
+* * e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg or IMGP7001.jpg
 
 ## <a name="resize"></a>Resizing Images
 When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by [ImageMagick](http://www.imagemagick.org/index.php). Normally Unix comes with ImageMagick already installed you can check this by typing `$ identify -version`.
