@@ -37,7 +37,9 @@
 <ul>
 <li><a href="#Description">Description</a></li>
 <li><a href="#Gallery%20Example">Gallery Example</a></li>
+<li><a href="#Requirements">Requirements</a></li>
 <li><a href="#Setup">Setup</a></li>
+<li><a href="#Resize">Resizing Images</a></li>
 <li><a href="#License">License</a></li>
 </ul><h2>
 <a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a><a name="Description"></a>Description</h2>
@@ -48,6 +50,11 @@
 <a name="gallery-example" class="anchor" href="#gallery-example"><span class="octicon octicon-link"></span></a><a name="Gallery%20Example"></a>Gallery Example</h2>
 
 <p><a href="http://andreaslorer.de/">Gallery Demo</a></p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a><a name="Requirements"></a>Requirements</h2>
+
+<p>If you want to run it on localhost you need a server (like Xampp) of course</p>
 
 <h2>
 <a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a><a name="Setup"></a>Setup</h2>
@@ -91,6 +98,16 @@ Add Images and Thumbnail into the appropriate folders:  </p>
 <li>thumbnails have to be named thumb_imagename.</li>
 <li>* e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg</li>
 </ul><h2>
+<a name="resizing-images" class="anchor" href="#resizing-images"><span class="octicon octicon-link"></span></a><a name="resize"></a>Resizing Images</h2>
+
+<p>When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by <a href="http://www.imagemagick.org/index.php">ImageMagick</a>. Normally Unix comes with ImageMagick already installed you can check this by typing <code>$ identify -version</code>.</p>
+
+<p>Make a backup of your images befor you run this command!!! (If your pictures are in another file format, change *.jpg to the format you like e.g. *.png)</p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>mkdir images<span class="p">;</span> ls *.jpg <span class="p">|</span> xargs -r -I FILE   convert FILE -auto-orient -unsharp 0x0.5 -resize 1600x1200 -strip images/FILE <span class="o">&amp;&amp;</span> mkdir thumbs<span class="p">;</span> ls *.jpg <span class="p">|</span> xargs -r -I FILE   convert FILE -define jpeg:size<span class="o">=</span>760x760 -auto-orient -thumbnail 300 -unsharp 0x0.5 -strip thumbs/thumb_FILE
+</pre></div>
+
+<h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a><a name="License"></a>License</h2>
 
 <p>Released under the <a href="http://opensource.org/licenses/MIT">MIT License</a></p>
