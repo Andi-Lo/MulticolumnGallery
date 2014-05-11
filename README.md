@@ -17,7 +17,7 @@ Clone or download and unzip the repository to your website.
 Include the following files in your HTML document. Make sure that the includes are in this order placed in your HTML `<head>`! (the JQuery library has to be loaded befor the javascript files) 
 ```html
 <!-- JQuery library -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <!-- Gallery core JS files -->
 <script src="js/Ajax.js" type="text/javascript"></script>
 <script src="js/Scrolling.js" type="text/javascript"></script>
@@ -40,7 +40,12 @@ Add the following div-box into your HTML document
 	
 </div><!-- ./popup-gallery -->
 ```
-Customize your gallery through the config file placed in /config/config.json
+Customize your gallery through the config file placed in /config/config.json  
+Add Images and Thumbnail into the appropriate folders:  
+* Image files should be 1600*1200 to increase performance.
+* Supported image formats are png, jpg, gif.
+* thumbnails have to be named thumb_imagename.
+* * e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg
 
 ## <a name="License"></a>License
 Released under the [MIT License](http://opensource.org/licenses/MIT)
