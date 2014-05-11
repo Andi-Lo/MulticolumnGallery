@@ -6,13 +6,16 @@ MulticolumnGallery
 * [Setup](#Setup)
 * [License](#License)
 
-### <a name="Description"></a>Description  
+### <a name="Description"></a>Description 
+================== 
 Dynamic, customizable and responsive image gallery.
 
 ### <a name="Gallery Example"></a>Gallery Example
-[Example](http://andreaslorer.de/)
+==================
+[Gallery Demo](http://andreaslorer.de/)
 
 ### <a name="Setup"></a>Setup
+==================
 Clone or download and unzip the repository to your website.  
 Include the following files in your HTML document.  
 ```html
@@ -44,4 +47,5 @@ Add the following div-box into your HTML document
 Customize your gallery through the config file placed in /config/config.json
 
 ### <a name="License"></a>License
+==================
 Released under the [MIT License](http://opensource.org/licenses/MIT)
