@@ -1,4 +1,4 @@
-On default: Place your images here. Make sure to resize them to something like 1600*1200 to increase perfomance!
+On default: Place your images here (assets/images/) and thumbnails in (assets/thumbs). Make sure to resize them to something like 1600*1200 to increase perfomance!
 Make sure the image format is in jpg, jpeg, gif or png!
 
 IMPORTANT: For now the thumbnails of the images have to be named thumb_Imagename and be in jpg, jpeg, gif or png format!
