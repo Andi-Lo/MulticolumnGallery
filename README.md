@@ -18,7 +18,7 @@ Include the following files in your HTML document. Make sure that the includes a
 ```html
 <!-- JQuery library -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!-- gallery core -->
+<!-- Gallery core JS files -->
 <script src="js/Ajax.js" type="text/javascript"></script>
 <script src="js/Scrolling.js" type="text/javascript"></script>
 <script src="js/Resize.js" type="text/javascript"></script>
