@@ -19,7 +19,6 @@ Include the following files in your HTML document.
 <script src="js/Ajax.js" type="text/javascript" charset="utf-8" async defer></script>
 <script src="js/Resize.js" type="text/javascript"></script>
 <script src="js/Scrolling.js" type="text/javascript"></script>
-<script src="assets/magnific-popup/magnific-popup.js"></script>
 <script src="js/ColumnBuilder.js" type="text/javascript"></script>
 ```
 If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for more infos or help) for your images enabled, include the following files into your HTML document:
