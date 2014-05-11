@@ -67,7 +67,7 @@ class Image{
 
 	public function setThumbnailName($img)
 	{
-		$findme = array('.jpg','.jpeg','.png');     	       				// supported datatypes
+		$findme = array('.jpg','.jpeg','.png', '.gif');     	  		// supported datatypes
 		foreach ($findme as $format) {                                             
 			if(strpos($img->imgName, $format)){                     	// imagename is name.jpg/png/.. ?
 				foreach (self::$_thumbNames as $thumb_name) {                      
@@ -82,7 +82,7 @@ class Image{
 			}
 		}
 		return "file_not_found";
-	}
+	} /* TODO: remove thumb_ name restriction */
 
 }
 
