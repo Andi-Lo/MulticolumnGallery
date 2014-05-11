@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Multicolumngallery : Dynamic, customizable and responsive Image Gallery." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Multicolumngallery</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bitHugger/MulticolumnGallery">View on GitHub</a>
+
+          <h1 id="project_title">Multicolumngallery</h1>
+          <h2 id="project_tagline">Dynamic, customizable and responsive Image Gallery.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/bitHugger/MulticolumnGallery/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bitHugger/MulticolumnGallery/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="multicolumngallery" class="anchor" href="#multicolumngallery"><span class="octicon octicon-link"></span></a>MulticolumnGallery</h1>
+
+<ul>
+<li><a href="#Description">Description</a></li>
+<li><a href="#Gallery%20Example">Gallery Example</a></li>
+<li><a href="#Setup">Setup</a></li>
+<li><a href="#License">License</a></li>
+</ul><h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a><a name="Description"></a>Description</h2>
+
+<p>Dynamic, customizable and responsive image gallery.</p>
+
+<h2>
+<a name="gallery-example" class="anchor" href="#gallery-example"><span class="octicon octicon-link"></span></a><a name="Gallery%20Example"></a>Gallery Example</h2>
+
+<p><a href="http://andreaslorer.de/">Gallery Demo</a></p>
+
+<h2>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a><a name="Setup"></a>Setup</h2>
+
+<p>Clone or download and unzip the repository to your website.<br>
+Include the following files in your HTML document. Make sure that the includes are in this order placed in your HTML <code>&lt;head&gt;</code>! (the JQuery library has to be loaded befor the javascript files) </p>
+
+<div class="highlight highlight-html"><pre><span class="c">&lt;!-- JQuery library --&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="c">&lt;!-- Gallery core JS files --&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Ajax.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Scrolling.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Resize.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/ColumnBuilder.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<p>If you want a Lightbox (see <a href="http://dimsemenov.com/plugins/magnific-popup/">http://dimsemenov.com/plugins/magnific-popup/</a> for more infos or help) for your images enabled, include the following files into your HTML document:</p>
+
+<div class="highlight highlight-html"><pre><span class="c">&lt;!-- Magnific Popup core CSS file --&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"assets/magnific-popup/magnific-popup.css"</span><span class="nt">&gt;</span> 
+
+<span class="c">&lt;!-- Magnific Popup core JS file --&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"assets/magnific-popup/magnific-popup.js"</span><span class="nt">&gt;&lt;/script&gt;</span> 
+</pre></div>
+
+<p>Add the following div-box into your HTML document</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"gallery"</span> <span class="na">class=</span><span class="s">"popup-gallery"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"assets/magnific-popup/magnific.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span><span class="c">&lt;!-- ./popup-gallery --&gt;</span>
+</pre></div>
+
+<p>Customize your gallery through the config file placed in /config/config.json<br>
+Add Images and Thumbnail into the appropriate folders:  </p>
+
+<ul>
+<li>Image files should be 1600*1200 to increase performance.</li>
+<li>Supported image formats are png, jpg, gif.</li>
+<li>thumbnails have to be named thumb_imagename.</li>
+<li>* e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a><a name="License"></a>License</h2>
+
+<p>Released under the <a href="http://opensource.org/licenses/MIT">MIT License</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Multicolumngallery maintained by <a href="https://github.com/bitHugger">bitHugger</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
