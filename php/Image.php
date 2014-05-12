@@ -1,4 +1,16 @@
 <?php
+/**
+ * Multicolumn image gallery by Andreas Lorer
+ * http://andreaslorer.de
+ * 
+ * GNU General Public License, version 2
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * Examples and documentation available on the project homepage
+ * http://bithugger.github.io/MulticolumnGallery/
+ * 
+ */
+ 
 require_once 'Gallery.php';
 
 class Image{
