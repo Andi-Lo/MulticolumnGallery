@@ -2,6 +2,7 @@ MulticolumnGallery
 ==================
 
 * [Description](#Description)
+* [Features](#Features)
 * [Gallery Example](#Gallery Example)
 * [Requirements](#Requirements)
 * [Setup](#Setup)
@@ -9,7 +10,16 @@ MulticolumnGallery
 * [License](#License)
 
 ## <a name="Description"></a>Description 
-Dynamic, customizable and responsive image gallery.
+Dynamic, customizable and responsive image gallery.  
+Show your best pictures to the world with a very minimalistic approach. No picture raiting, nor comments or taggin so your pictures stay in the spotlight!
+
+## <a name="Features"></a>Features
+* Lightweight
+* Responsive
+* No database needed
+* Supports any number of columns
+* Use picture sizes that suits you best
+* Position your gallery via a simple config file
 
 ## <a name="Gallery Example"></a>Gallery Example
 [Gallery Demo](http://andreaslorer.de/)
