@@ -35,7 +35,7 @@ class Config{
 		$this->margin_top = $json['margin_top'];
 		$this->margin_right = $json['margin_right'];
 		$this->number_of_columns = $json['number_of_columns'];
-		$this->center = $json['center_fifth_column'];
+		$this->center = $json['center_column'];
 		$this->image_path = $json['your_image_directory_path'];
 		$this->thumb_path = $json['your_thumbnail_directory_path'];
 		$this->resize = $json['resize_columns'];
