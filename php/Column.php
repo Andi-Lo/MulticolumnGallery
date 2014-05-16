@@ -82,7 +82,7 @@ class Column{
 			if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
 				$padLeft = ($request['width'] - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
 			}else{
-				$padLeft = PAD_LEFT_HD;
+				$padLeft = PAD_LEFT_HDR;
 			}
 
 			asort(self::$_columnHeight[$columnNr]);
