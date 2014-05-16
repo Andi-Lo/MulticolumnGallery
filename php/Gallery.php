@@ -23,13 +23,6 @@ for ($i=0; $i < $config->number_of_columns; $i++) {
 }
 
 if(! defined("COLUMN_ONE")) define("COLUMN_ONE",  0);
-if(! defined("COLUMN_TWO")) define("COLUMN_TWO",  1);
-if(! defined("COLUMN_THREE")) define("COLUMN_THREE",2);
-if(! defined("COLUMN_FOUR")) define("COLUMN_FOUR", 3);
-if(! defined("COLUMN_FIVE")) define("COLUMN_FIVE", 4);
-if(! defined("COLUMN_SIX")) define("COLUMN_SIX", 5);
-if(! defined("COLUMN_SEVEN")) define("COLUMN_SEVEN", 6);
-if(! defined("COLUMN_EIGHT")) define("COLUMN_EIGHT", 7);
 if(! defined("NUM_OF_COLUMNS")) define("NUM_OF_COLUMNS", $config->number_of_columns);
 if(! defined("THUMB_WIDTH")) define("THUMB_WIDTH", (int) $config->thumbnail_width);
 if(! defined("PAD_LEFT_HD")) define("PAD_LEFT_HD", (int) $config->margin_left_hd);
