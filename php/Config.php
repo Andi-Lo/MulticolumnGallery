@@ -24,6 +24,7 @@ class Config{
 	public $center = 'yes';
 	public $resize = 'yes';
 	public $fadeIn = 'yes';
+	public $shuffle = 'yes';
 
 	function __construct($path)
 	{
@@ -40,6 +41,7 @@ class Config{
 		$this->thumb_path = $json['your_thumbnail_directory_path'];
 		$this->resize = $json['resize_columns'];
 		$this->fadeIn = $json['fade_in_pictures'];
+		$this->shuffle = $json['shuffle_older_pictures'];
 	}
 }
 

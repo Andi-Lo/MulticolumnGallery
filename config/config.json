@@ -6,9 +6,10 @@
 	"space_between_pictures":"10",
 	"margin_left":"10",
 	"margin_left_hd":"180",
-	"margin_top":"70",
+	"margin_top":"10",
 	"margin_right":"300",
 	"center_column":"yes",
 	"resize_columns":"yes",
-	"fade_in_pictures":"yes"
+	"fade_in_pictures":"yes",
+	"shuffle_older_pictures":"yes"
 }
