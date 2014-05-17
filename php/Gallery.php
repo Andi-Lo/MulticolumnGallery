@@ -46,15 +46,16 @@ class Gallery{
 	
 	function __construct()
 	{
-		$column = new Column();
-		$image = new Image();
-		$images = $image->initializing();
 		global $config;
-		for ($i=1; $i <= $config->number_of_columns; $i++) { 
+		$column = new Column();
+		$images = new Image();
+		$images = $images->initializing();
+
+		for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
 			if($i == 1){
-				$names[] = $i.'_Column';
+				$columnNames[] = $i.'_Column';
 			} else{
-				$names[] = $i.'_Columns';
+				$columnNames[] = $i.'_Columns';
 			}
 		}
 
@@ -62,13 +63,13 @@ class Gallery{
 			array(
 				'mediaQueries'  => $column->calcQueries(),
 				'numOfColumns'  => NUM_OF_COLUMNS,
-				'columnNames'	  => $names,
+				'columnNames'	  => $columnNames,
 				'resize'				=> $config->resize,
 				'fadeIn'        => $config->fadeIn,
 			);
 
 		for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
-			self::$_columnContainer[$names[$i]] = $column->getColumn($i, $images);
+			self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
 		}
 
 		self::printJSON();
