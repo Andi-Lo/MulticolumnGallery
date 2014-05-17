@@ -14,19 +14,19 @@
 require_once 'Gallery.php';
 
 class Column{
-	public $id = 0;
-	public $imgName = "";
+	public $id = 0;						
+	public $imgName = "";			
 	public $imgPath = "";
-	public $posX = 0;
-	public $posY = 0;
-	public $width = 0;
-	public $height = 0;
-	public $thumbnail = "";
-	public $thumbPath = "";
-	public $request = "";
+	public $posX = 0;														// the X-achsis position of the picture
+	public $posY = 0;														// the Y-achsis position of the picture
+	public $width = 0;					
+	public $height = 0;					 
+	public $thumbnail = "";											// the thumbnail, belonging to the picture
+	public $thumbPath = "";											// the path of the thumbnail
+	public $request = "";												// the ajax request object
 
-	public static $_init = false;
-	public static $_columnHeight = array();
+	public static $_init = false;								// just initialize the class once
+	public static $_columnHeight = array();			// contains all column heights
 
 	/* Build an dynamic sized container array to store the height of each column */
 	private static function initClass($numOfColumns)
@@ -40,6 +40,7 @@ class Column{
 		}
 	}
 
+	/* get a column with the given amount back */
 	public static function getColumn($numOfColumns, $images)
 	{
 		if(! self::$_init){
@@ -49,8 +50,8 @@ class Column{
 		$arr = array();
 
 		if($numOfColumns >= 0){
-			foreach ($images as $key) {
-				$arr[] = Column::calcColumn($numOfColumns, $key);
+			foreach ($images as $img) {
+				$arr[] = Column::calcColumn($numOfColumns, $img);
 			}
 		return $arr;
 		}else{
@@ -58,10 +59,11 @@ class Column{
 		}
 	}
 
+	/* calculate the image positions for each column */
 	public function calcColumn($columnNr, $key)
 	{
-		$request = $_POST;
 		global $config;
+		$request = $_POST;
 		$column = new Column();
 		$column->calcDispVal($key, THUMB_WIDTH);
 		$column->initProperties($column, $key);

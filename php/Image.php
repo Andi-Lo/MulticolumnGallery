@@ -31,9 +31,15 @@ class Image{
 
 	public function initializing()
 	{
+		global $config;
 		$images = array();
 		$names = array();
 		$names = $this->readDirectory(DIR_PATH_IMAGES);
+
+		if($config->shuffle == 'yes'){
+			shuffle($names);
+		}
+	
 		self::$_thumbNames = $this->readDirectory(DIR_PATH_THUMBNAILS);
 
 		foreach($names as $value){
@@ -50,13 +56,13 @@ class Image{
 		Image::osort($images);
 		return $images;
 	}
-
+	
 	public function readDirectory($imagePath)
 	{
 		$names = array();
 		if(is_dir($imagePath)){
 			$scanned_directory = array_diff(scandir($imagePath), array('..', '.'));
-			foreach ($scanned_directory as $key => $value) {        
+			foreach ($scanned_directory as $key => $value) {     
 				$names[] = $value;
 			}
 			return $names;
