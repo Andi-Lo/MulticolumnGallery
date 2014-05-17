@@ -46,7 +46,7 @@ $.ajax({
 			};
 			
 		},
-		error: function(xhr, desc, err) {
-			console.log(xhr + "\n" + err);
+		error: function(err) {
+			console.log("Ajax Error: "+ err);
 		}
 	}); // end ajax call
