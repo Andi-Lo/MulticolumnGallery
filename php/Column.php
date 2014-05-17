@@ -60,26 +60,31 @@ class Column{
 	}
 
 	/* calculate the image positions for each column */
-	public function calcColumn($columnNr, $key)
+	public function calcColumn($columnNr, $img)
 	{
 		global $config;
 		$request = $_POST;
 		$column = new Column();
-		$column->calcDispVal($key, THUMB_WIDTH);
-		$column->initProperties($column, $key);
+		$column->calcDispVal($img, THUMB_WIDTH);
+		$column->initProperties($column, $img);
 
+		/* one column */
 		if($columnNr == 0){
+			/* calculate margin left to display the column centered*/
 			$padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
-			$column->posY = self::$_columnHeight[COLUMN_ONE][0];
+
+			$img->posY = self::$_columnHeight[COLUMN_ONE][0];
+			
 			/* screen width is too small for 2 pictures, display 1 column centered */
 			if($request['width'] < (PAD_LEFT_HDR + THUMB_WIDTH*2 + PAD*2)){
-				$column->posX = $padLeft;
-			}else{
-				$column->posX = PAD_LEFT_HDR;
+				$img->posX = $padLeft;
+			}
+			else{
+				$img->posX = PAD_LEFT_HDR;
 			}
 			self::$_columnHeight[COLUMN_ONE][0] = ((self::$_columnHeight[COLUMN_ONE][0] + $column->height) + PAD);
-			return $column;
-		}
+			return $img;
+		} /* more then one column */
 		else{
 			if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
 				$padLeft = ($request['width'] - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
@@ -87,19 +92,27 @@ class Column{
 				$padLeft = PAD_LEFT_HDR;
 			}
 
+			/* sorts the array low to heigh while keeping its key => value structure. 
+			Index 0 represents the column with the least height so the image will be placed there */
 			asort(self::$_columnHeight[$columnNr]);
+			/* reset the array pointer so it points to index 0 */
 			reset(self::$_columnHeight[$columnNr]);
-			$first_key = key(self::$_columnHeight[$columnNr]);
-			$column->posY = self::$_columnHeight[$columnNr][$first_key];
-			self::$_columnHeight[$columnNr][$first_key] = ((self::$_columnHeight[$columnNr][$first_key] + $column->height) + PAD);
+			$index0 = key(self::$_columnHeight[$columnNr]);
 
-			if($first_key == NUM_OF_COLUMNS){
-				$column->posX = $padLeft + (PAD + THUMB_WIDTH) * $first_key;
-			}			
-			else if($first_key == 0){
+			$column->posY = self::$_columnHeight[$columnNr][$index0];
+
+			/* add the height of the image to the global height container */
+			self::$_columnHeight[$columnNr][$index0] = ((self::$_columnHeight[$columnNr][$index0] + $column->height) + PAD);
+
+			/* its the max column (n) */
+			if($index0 == NUM_OF_COLUMNS){
+				$column->posX = $padLeft + (PAD + THUMB_WIDTH) * $index0;
+			}	/* its the min column (1) */
+			else if($index0 == 0){
 				$column->posX = $padLeft;
-			}else{
-				$column->posX = $padLeft + (PAD + THUMB_WIDTH) * $first_key;
+			} /* its a column between (2) and (n-1) */
+			else{ 
+				$column->posX = $padLeft + (PAD + THUMB_WIDTH) * $index0;
 			}
 			return $column;
 		}
@@ -116,22 +129,23 @@ class Column{
 		$column->height = $img->displayHeight;
 	}
 
+	/* calc the image ratio to keep formats */
 	public function calcDispVal($img, $imgSize)
 	{
 		$imgRatio = 0;
 		$img->displayWidth = $imgSize;
 		$imgRatio = $imgSize / $img->width;	
-		$img->displayHeight = (int)($imgRatio* $img->height);
+		$img->displayHeight = (int)($imgRatio * $img->height);
 	}
 
-	/* Calculate media queries for responsivness */
+	/* calc media queries for responsivness */
 	public function calcQueries()
 	{
+		global $config;
 		$queries = array();
 		$result = 0;
 		$request = $_POST;
 		$padLeft = 0;
-		global $config;
 
 		if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
 			$padLeft = ($request['width'] - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
@@ -139,13 +153,16 @@ class Column{
 			$padLeft = PAD_LEFT_HDR;
 		}
 
+		/* for each column, calculate the size of the gallery to specify media queries */
 		for ($column = 1; $column <= NUM_OF_COLUMNS; $column++) {
+				/* its the max column (n) */
 			if($column == NUM_OF_COLUMNS){
 				$result = $padLeft + ($column * THUMB_WIDTH) + PAD + ($column * PAD);
-			}
+			} /* its the min column (1) */
 			elseif($column == 1){
 				$result = $padLeft + THUMB_WIDTH + PAD;
-			}else{
+			} /* its a column between (2) and (n-1) */
+			else{
 				$result = $padLeft + ($column * THUMB_WIDTH) + PAD + ($column * PAD);
 			}
 			$queries[] = $result;
