@@ -31,6 +31,7 @@ if(! defined("PAD_TOP")) define("PAD_TOP", (int) $config->margin_top);
 if(! defined("PAD")) define("PAD", (int) $config->offset);
 if(! defined("PATH_THUMBNAILS")) define("PATH_THUMBNAILS", $config->thumb_path);
 if(! defined("PATH_IMAGES")) define("PATH_IMAGES", $config->image_path);
+if(! defined("GALLERY_SIZE")) define("GALLERY_SIZE", PAD_LEFT_HD + (NUM_OF_COLUMNS * THUMB_WIDTH) + PAD + (NUM_OF_COLUMNS * PAD));
 if(! defined("DIR_PATH_THUMBNAILS")) define("DIR_PATH_THUMBNAILS", "../".PATH_THUMBNAILS);
 if(! defined("DIR_PATH_IMAGES")) define("DIR_PATH_IMAGES" , "../".PATH_IMAGES);
 
