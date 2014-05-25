@@ -69,7 +69,7 @@ class Column{
 		$column->initProperties($column, $img);
 
 		/* one column */
-		if($columnNr == 0){
+		if($columnNr == 1){
 			/* calculate margin left to display the column centered*/
 			$padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
 
