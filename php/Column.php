@@ -14,13 +14,13 @@
 require_once 'Gallery.php';
 
 class Column{
-	public $id = 0;						
-	public $imgName = "";			
+	public $id = 0;
+	public $imgName = "";
 	public $imgPath = "";
 	public $posX = 0;														// the X-achsis position of the picture
 	public $posY = 0;														// the Y-achsis position of the picture
-	public $width = 0;					
-	public $height = 0;					 
+	public $width = 0;
+	public $height = 0;
 	public $thumbnail = "";											// the thumbnail, belonging to the picture
 	public $thumbPath = "";											// the path of the thumbnail
 	public $request = "";												// the ajax request object
@@ -44,8 +44,8 @@ class Column{
 	public static function getColumn($numOfColumns, $images)
 	{
 		if(! self::$_init){
-			Column::initClass($numOfColumns);
 			self::$_init = true;
+			Column::initClass($numOfColumns);
 		}
 		$arr = array();
 
@@ -69,21 +69,21 @@ class Column{
 		$column->initProperties($column, $img);
 
 		/* one column */
-		if($columnNr == 1){
+		if($columnNr == 0){
 			/* calculate margin left to display the column centered*/
 			$padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
 
-			$img->posY = self::$_columnHeight[COLUMN_ONE][0];
+			$column->posY = self::$_columnHeight[COLUMN_ONE][0];
 			
 			/* screen width is too small for 2 pictures, display 1 column centered */
 			if($request['width'] < (PAD_LEFT_HDR + THUMB_WIDTH*2 + PAD*2)){
-				$img->posX = $padLeft;
+				$column->posX = $padLeft;
 			}
 			else{
-				$img->posX = PAD_LEFT_HDR;
+				$column->posX = PAD_LEFT_HDR;
 			}
 			self::$_columnHeight[COLUMN_ONE][0] = ((self::$_columnHeight[COLUMN_ONE][0] + $column->height) + PAD);
-			return $img;
+			return $column;
 		} /* more then one column */
 		else{
 			if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
@@ -114,6 +114,7 @@ class Column{
 			else{ 
 				$column->posX = $padLeft + (PAD + THUMB_WIDTH) * $index0;
 			}
+			// print_r(self::$_columnHeight);
 			return $column;
 		}
 	}
@@ -134,7 +135,7 @@ class Column{
 	{
 		$imgRatio = 0;
 		$img->displayWidth = $imgSize;
-		$imgRatio = $imgSize / $img->width;	
+		$imgRatio = $imgSize / $img->width;
 		$img->displayHeight = (int)($imgRatio * $img->height);
 	}
 

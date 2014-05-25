@@ -71,7 +71,6 @@ class Gallery{
 		for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
 			self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
 		}
-
 		self::printJSON();
 	}
 

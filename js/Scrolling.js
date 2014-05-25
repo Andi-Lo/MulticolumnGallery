@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
 				if(scrollEvents > 0 || isInit == false){
 					scrollEvents = 0;
 					isInit = true;
-					setImgVisibility(30);
+					refreshScreenOnScroll(30);
 				}
 			}
 		} 
