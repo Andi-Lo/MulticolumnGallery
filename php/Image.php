@@ -85,17 +85,21 @@ class Image{
 
 	public function setThumbnailName($img)
 	{
+		global $config;
+		$prefix = $config->thumbnail_prefix;
+		$postfix = $config->thumbnail_postfix;
 		$findme = array('.jpg','.jpeg','.png', '.gif');     	  							// supported datatypes
 		foreach ($findme as $format) {                                             
 			if(strpos($img->imgName, $format)){                     						// imagename is name.jpg/png/.. ?
 				foreach (self::$_thumbNames as $thumb_name) {                      
 					$pos = strpos($img->imgName, $format);        									// position of the datatype
-					$substring = substr($img->imgName, 0, $pos);																							// remove datatype from string
-					if("thumb_".$substring.$format == $thumb_name){ 								// if Thumbnail is in folder
+					$substring = substr($img->imgName, 0, $pos);										// remove datatype from string
+					if($prefix.$substring.$postfix.$format == $thumb_name){ 				// if Thumbnail is in folder
 						$img->thumbnailPath = PATH_THUMBNAILS.         	  						// set thumbnail path
-								"thumb_".$substring.$format;
-						return "thumb_".$substring.$format;              							// return Thumbnailname (bsp: thumb_IMG2342.jpg)
-					} elseif($substring.$format == $thumb_name){
+								$prefix.$substring.$postfix.$format;
+						return $prefix.$substring.$postfix.$format;              			// return Thumbnailname (bsp: thumb_IMG2342.jpg)
+					} /* maybe not needed cause of config file */
+					elseif($substring.$format == $thumb_name){
 						$img->thumbnailPath = PATH_THUMBNAILS.$substring.$format;
 						return $substring.$format;
 					}
