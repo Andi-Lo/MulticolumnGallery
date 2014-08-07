@@ -17,17 +17,13 @@ function buildColumn (columnName) {
 
 	$('.images').remove();
 	jQuery.each(requestResult[columnName], function(i,image){
-	   if(typeof image == 'object' && image !== null) {
-	   		/* image position is in the users screensize -> image is visible */
-    	if(image.posY <= winHeight){ 
+		if(typeof image == 'object' && image !== null) {
+			/* image position is in the users screensize -> image is visible */
+			if(image.posY <= winHeight+600) 
 				html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:visible; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';
-			} /* image is hidden*/
-			else{
-				// html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';
-			}
-		} else {
+		}
+		else
 			return false;
-	   }
 	})
 	$('#gallery').append(html);
 	return;
@@ -37,21 +33,16 @@ function buildColumn (columnName) {
 function addImgToColumn (columnName, scrollPos) {
 	html = "";
 	var winHeight = $(window).innerHeight();
-	console.log(scrollPos);
 
 	jQuery.each(requestResult[columnName], function(i,image){
-	   if(typeof image == 'object' && image !== null) {
-	   		/* image position is in the users screensize -> image is visible */
-    	if(image.posY <= scrollPos+300){ 
-				html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';
-			} /* image is hidden*/
-			else{
-				
-			}
-		} else {
+		if(typeof image == 'object' && image !== null) {
+			/* image gets loaded but is hidden till user scrolls there*/
+			if(image.posY <= scrollPos+1200)
+				html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';	
+		} 
+		else
 			return false;
-	   }
 	})
 	$('#gallery').append(html);
 	return;
-}
+} /* end addImgToColumn */

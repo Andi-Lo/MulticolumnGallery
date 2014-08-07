@@ -10,23 +10,23 @@
  * 
  */
  
-var oldScrlPos = 0;
+var scrollPosSave = 0;
 var scrollEvents = 0;
 var innerWinHeight = $(window).innerHeight();
+var scrollHeight = innerWinHeight;
 var isInit = false;
 var winWidth = $(window).innerWidth();
 
 /* func to calculate if the picture visibility has to be changed */
 jQuery(document).ready(function($) {
 	$(window).scroll(function() {
-		var newScrlPos = innerWinHeight + $(window).scrollTop();
-		if(oldScrlPos < newScrlPos){
+		var newScrollPos = innerWinHeight + $(window).scrollTop();
+		if(newScrollPos > scrollPosSave){
 			scrollEvents++;
 			if(winWidth > 631 || isInit == false){
-					isInit = true;
-					addImgToColumn(names[columns-1], newScrlPos);
-					refreshScreenOnScroll(100);
-				}	
+				isInit = true;
+				refreshScreenOnScroll(100);
+			} 
 			else{
 				if(scrollEvents > 0 || isInit == false){
 					scrollEvents = 0;
@@ -38,12 +38,28 @@ jQuery(document).ready(function($) {
 	});
 });
 
+/* lazy loading function: Adds images depending on the Users scrolling position */
+jQuery(document).ready(function($){
+	$(window).scroll(function() {
+		var newScrollPos = innerWinHeight + $(window).scrollTop();
+
+		/* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
+		if(newScrollPos > scrollPosSave &&  newScrollPos > scrollHeight){
+			scrollHeight += 300;
+			addImgToColumn(names[columns-1], newScrollPos);
+		}
+		else
+			return;
+	});
+});
+
 $(function(){
 	$(window).resize(function(){
 		winWidth = $(window).innerWidth();
 	})
 });
 
+/*changes the css-visibility value of the images if it has to be set to visible*/
 function refreshScreenOnScroll(offset) {
 	var scrlPos = innerWinHeight + $(window).scrollTop();
 	$('.images').each(function(){
@@ -58,11 +74,12 @@ function refreshScreenOnScroll(offset) {
 			} else{
 				$(this).css("visibility", "visible");
 			}
-			oldScrlPos = scrlPos;
+			scrollPosSave = scrlPos;
 		}
 	});
 }
 
+/* changes the css-visibility value of the images if it has to be set to visible*/
 function refreshScreen() {
 	var scrlPos = innerWinHeight + $(window).scrollTop();
 	$('.images').each(function(){
@@ -72,7 +89,7 @@ function refreshScreen() {
 		if(scrlPos >= cssTopValue && cssTopValue != 'NaN')
 		{
 			$(this).css("visibility", "visible");
-			oldScrlPos = scrlPos;
+			scrollPosSave = scrlPos;
 		}
 	});
 }
