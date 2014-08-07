@@ -39,9 +39,6 @@ new Gallery();
 
 class Gallery{
 
-	public $images = array();
-	public $mediaQueries = array();
-
 	public static $_columnContainer = array();
 	
 	function __construct()

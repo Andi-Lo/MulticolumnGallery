@@ -33,17 +33,20 @@ $.ajax({
 			resize = requestResult['resize'];
 			fadeIn = requestResult['fadeIn'];
 			
-			for (var i = 0; i < columns; i++) {
-				if(i == 0){
-					buildColumn(names[i]);
-					refreshScreen();
-				}else{
-					if(winWidth >= queries[i]){
-						buildColumn(names[i]);
-						refreshScreen();
-					}
-				}
-			};
+			// for (var i = 0; i < columns; i++) {
+			// 	if(i == 0){
+			// 		buildColumn(names[i]);
+			// 		refreshScreen();
+			// 	}else{
+			// 		if(winWidth >= queries[i]){
+			// 			buildColumn(names[i]);
+			// 			refreshScreen();
+			// 		}
+			// 	}
+			// };
+
+			buildColumn(names[columns-1]);
+			refreshScreen();
 			
 		},
 		error: function(err) {

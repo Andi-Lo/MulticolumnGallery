@@ -13,8 +13,8 @@
 var oldScrlPos = 0;
 var scrollEvents = 0;
 var innerWinHeight = $(window).innerHeight();
-var isInit = false;	
-var winWidth = $(window).innerWidth();		
+var isInit = false;
+var winWidth = $(window).innerWidth();
 
 /* func to calculate if the picture visibility has to be changed */
 jQuery(document).ready(function($) {
@@ -24,6 +24,7 @@ jQuery(document).ready(function($) {
 			scrollEvents++;
 			if(winWidth > 631 || isInit == false){
 					isInit = true;
+					addImgToColumn(names[columns-1], newScrlPos);
 					refreshScreenOnScroll(100);
 				}	
 			else{

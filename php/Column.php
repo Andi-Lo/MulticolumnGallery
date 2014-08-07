@@ -40,7 +40,7 @@ class Column{
 		}
 	}
 
-	/* get a column with the given amount back */
+	/* get a column with the given amount of columns back */
 	public static function getColumn($numOfColumns, $images)
 	{
 		if(! self::$_init){
@@ -69,7 +69,7 @@ class Column{
 		$column->initProperties($column, $img);
 
 		/* one column */
-		if($columnNr == 0){
+		if($columnNr == COLUMN_ONE){
 			/* calculate margin left to display the column centered*/
 			$padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
 
