@@ -13,6 +13,10 @@
  
 require_once 'Gallery.php';
 
+function dateTakenSort( &$a, $b ) {
+  return $a->dateTaken == $b->dateTaken ? 0 : ( $a->dateTaken < $b->dateTaken ) ? 1 : -1;
+}    
+
 class Image{
   public $id = 0;
   public $imgName = "";
@@ -25,6 +29,7 @@ class Image{
   public $attr= "";
   public $thumbnailPath = "";
   public $thumbnail = "";
+  public $dateTaken = 0;
 
   public static $_numOfElements = 0;
   public static $_thumbNames = array(); 
@@ -35,11 +40,6 @@ class Image{
     $images = array();
     $names = array();
     $names = $this->readDirectory(DIR_PATH_IMAGES);
-
-    if($config->shuffle == 'yes'){
-      shuffle($names);
-    }
-  
     self::$_thumbNames = $this->readDirectory(DIR_PATH_THUMBNAILS);
 
     foreach($names as $value){
@@ -53,7 +53,12 @@ class Image{
       self::$_numOfElements++;
       $images[] = $img;
     }
-    Image::osort($images);
+
+    if($config->shuffle == 'yes')
+      shuffle($names);
+    else
+      usort($images, "dateTakenSort");
+  
     return $images;
   }
   
@@ -69,11 +74,6 @@ class Image{
     } else echo "readDirectory failed: no such directory found<br>";
   }
 
-  public static function osort(&$array)
-  {
-    $array = array_reverse($array, false);
-  }
-
   public function readMetadata($imgPath, $img)
   {  
     list($width, $height, $type, $attr) = getimagesize($imgPath);
@@ -81,6 +81,7 @@ class Image{
     $img->height = $height;
     $img->type = $type;
     $img->attr = $attr;
+    $img->dateTaken = $img->getDateTaken($imgPath);
   }
 
   public function setThumbnailName($img)
@@ -107,6 +108,25 @@ class Image{
       }
     }
     return "file_not_found";
+  }
+
+  public function getDateTaken($imgPath)
+  {
+    $exif = exif_read_data($imgPath, 0, true);
+    if($exif != false){
+      $dateTaken = $exif['EXIF']['DateTimeOriginal'];
+      return self::parseDateTaken($dateTaken);
+    }else
+      return 0;
+  }
+
+  public function parseDateTaken($date)
+  {
+    $tmp = split(" ", $date);
+    $tmp = $tmp[0];
+    $tmp = split(":", $tmp);
+    $date = $tmp[0].$tmp[1].$tmp[2];
+    return $date;
   }
 
 }

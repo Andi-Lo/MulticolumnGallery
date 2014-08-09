@@ -15,8 +15,8 @@ class Config{
   public $number_of_columns = 0;
   public $thumbnail_width = 0;
   public $thumb_path = "";
-  public $thumbnail_prefix;
-  public $thumbnail_postfix;
+  public $thumbnail_prefix = "";
+  public $thumbnail_postfix = "";
   public $image_path = "";
   public $offset = 0;
   public $margin_left_hdr = 0;
@@ -27,10 +27,11 @@ class Config{
   public $resize = 'yes';
   public $fadeIn = 'yes';
   public $shuffle = 'yes';
+  private static $_config_path = '../config/config.json';
 
-  function __construct($path)
+  function __construct()
   {
-    $json = json_decode(file_get_contents($path), true);
+    $json = json_decode(file_get_contents(self::$_config_path), true);
     $this->thumbnail_width = $json['thumbnail_width'];
     $this->thumbnail_postfix = $json['thumbnail_postfix'];
     $this->thumbnail_prefix = $json['thumbnail_prefix'];
@@ -45,7 +46,7 @@ class Config{
     $this->thumb_path = $json['your_thumbnail_directory_path'];
     $this->resize = $json['resize_columns'];
     $this->fadeIn = $json['fade_in_pictures'];
-    $this->shuffle = $json['shuffle_older_pictures'];
+    $this->shuffle = $json['shuffle_pictures'];
   }
 }
 

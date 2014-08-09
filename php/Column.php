@@ -23,7 +23,7 @@ class Column{
   public $height = 0;
   public $thumbnail = "";                     // the thumbnail, belonging to the picture
   public $thumbPath = "";                     // the path of the thumbnail
-  public $request = "";                       // the ajax request object
+  public $dateTaken = 0;
 
   public static $_init = false;               // just initialize the class once
   public static $_columnHeight = array();     // contains all column heights
@@ -38,10 +38,6 @@ class Column{
         sort(self::$_columnHeight[$i]);
       }
     }
-
-    /* comment for präsentation*/
-    // print_r(self::$_columnHeight);
-    //  end
   }
 
   /* get a column with the given amount back */
@@ -56,12 +52,6 @@ class Column{
     if($numOfColumns >= 0){
       foreach ($images as $img) {
         $arr[] = Column::calcColumn($numOfColumns, $img);
-
-        /* comment for präsentation*/
-        // if($numOfColumns == 1){
-        //  print_r(self::$_columnHeight[1]);
-        // }
-        // end
       }
     return $arr;
     }else{
@@ -125,9 +115,14 @@ class Column{
         $column->posX = $padLeft + (PAD + THUMB_WIDTH) * $index0;
       }
       // print_r(self::$_columnHeight);
+      
+      // print_r($column);
       return $column;
     }
   }
+
+  // usort() comparison function for Person objects
+  
 
   private function initProperties($column, $img)
   {
@@ -138,6 +133,7 @@ class Column{
     $column->imgPath = $img->imgPath;
     $column->width = $img->displayWidth;
     $column->height = $img->displayHeight;
+    $column->dateTaken = $img->dateTaken;
   }
 
   /* calc the image ratio to keep formats */
