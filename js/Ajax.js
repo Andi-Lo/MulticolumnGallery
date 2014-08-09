@@ -20,35 +20,35 @@ var columnHeight = "";
 
 /* ajax call for Gallery images*/
 $.ajax({
-		url: "php/Gallery.php",
-		type: 'post',
-		data: { width: $(window).width(), galleryWidth: $('.popup-gallery').innerWidth(),},
-		cache: false,
-		success: function(json) {
-			var winWidth = $(window).width();
-			var winHeight = $(window).height();
-			requestResult = json;
-			columns = requestResult['numOfColumns'];
-			queries = requestResult['mediaQueries'];
-			names = requestResult['columnNames'];
-			resize = requestResult['resize'];
-			fadeIn = requestResult['fadeIn'];
-			columnHeight = requestResult['columnHeight'];
-			activeColumn = requestResult['activeColumn']+"_Columns";
-			for (var i = 0; i < columns; i++) {
-				if(i == 0){
-					buildColumn(names[i]);
-					refreshScreen();
-				}else{
-					if(winWidth >= queries[i]){
-						buildColumn(activeColumn);
-						refreshScreen();
-					}
-				}
-			};
+    url: "php/Gallery.php",
+    type: 'post',
+    data: { width: $(window).width(), galleryWidth: $('.popup-gallery').innerWidth(),},
+    cache: false,
+    success: function(json) {
+      var winWidth = $(window).width();
+      var winHeight = $(window).height();
+      requestResult = json;
+      columns = requestResult['numOfColumns'];
+      queries = requestResult['mediaQueries'];
+      names = requestResult['columnNames'];
+      resize = requestResult['resize'];
+      fadeIn = requestResult['fadeIn'];
+      columnHeight = requestResult['columnHeight'];
+      activeColumn = requestResult['activeColumn']+"_Columns";
+      for (var i = 0; i < columns; i++) {
+        if(i == 0){
+          buildColumn(names[i]);
+          refreshScreen();
+        }else{
+          if(winWidth >= queries[i]){
+            buildColumn(activeColumn);
+            refreshScreen();
+          }
+        }
+      };
 
-		},
-		error: function(err) {
-			console.log("Ajax Error: "+ err);
-		}
-	}); // end ajax call
+    },
+    error: function(err) {
+      console.log("Ajax Error: "+ err);
+    }
+  }); // end ajax call

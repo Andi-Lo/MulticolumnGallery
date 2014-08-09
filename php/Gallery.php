@@ -17,7 +17,7 @@ require_once 'Image.php';
 
 $config = new Config();
 for ($i=0; $i < $config->number_of_columns; $i++) { 
-	if(! defined("COLUMN_".$i)) define("COLUMN_".$i, $i);
+  if(! defined("COLUMN_".$i)) define("COLUMN_".$i, $i);
 }
 
 if(! defined("COLUMN_ONE")) define("COLUMN_ONE",  0);
@@ -37,67 +37,67 @@ new Gallery();
 
 class Gallery{
 
-	public static $_columnContainer = array();
-	
-	function __construct()
-	{
-		global $config;
-		$column = new Column();
-		$images = new Image();
-		$images = $images->initializing();
-		$columnHeight = array();
-		$request = $_POST;
-		$requestWidth = $request['width'];
+  public static $_columnContainer = array();
+  
+  function __construct()
+  {
+    global $config;
+    $column = new Column();
+    $images = new Image();
+    $images = $images->initializing();
+    $columnHeight = array();
+    $request = $_POST;
+    $requestWidth = $request['width'];
 
-		for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
-			if($i == 1){
-				$columnNames[] = $i.'_Column';
-			} else{
-				$columnNames[] = $i.'_Columns';
-			}
-		}
+    for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
+      if($i == 1){
+        $columnNames[] = $i.'_Column';
+      } else{
+        $columnNames[] = $i.'_Columns';
+      }
+    }
 
-		$queries = $column->calcQueries();
-		$activeColumn = self::calcActiveColumn($requestWidth, $queries);
+    $queries = $column->calcQueries();
+    $activeColumn = self::calcActiveColumn($requestWidth, $queries);
 
-		self::$_columnContainer =
-			array(
-				'mediaQueries'  => $queries,
-				'numOfColumns'  => NUM_OF_COLUMNS,
-				'columnNames'	  => $columnNames,
-				'resize'				=> $config->resize,
-				'fadeIn'        => $config->fadeIn,
-				'activeColumn'  => $activeColumn,
-			);
+    self::$_columnContainer =
+      array(
+        'mediaQueries'  => $queries,
+        'numOfColumns'  => NUM_OF_COLUMNS,
+        'columnNames'   => $columnNames,
+        'resize'        => $config->resize,
+        'fadeIn'        => $config->fadeIn,
+        'activeColumn'  => $activeColumn,
+      );
 
-		for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
-			self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
-			$columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
-		}
+    for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
+      self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
+      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
+    }
 
-		self::$_columnContainer['columnHeight'] = $columnHeight;
-		self::printJSON();
-	}
+    self::$_columnContainer['columnHeight'] = $columnHeight;
+    self::printJSON();
+  }
 
-	public function printJSON()
-	{
-		header("content-type:application/json");
-		echo (json_encode(self::$_columnContainer));
-	}
+  public function printJSON()
+  {
+    header("content-type:application/json");
+    echo (json_encode(self::$_columnContainer));
+  }
 
-	public function calcActiveColumn($requestWidth, $queries)
-	{
-		$tmpDiff = 0;
-		$key = -1;
+  public function calcActiveColumn($requestWidth, $queries)
+  {
+    $tmpDiff = 0;
+    $key = -1;
 
-		foreach ($queries as $query => $value) {
-			$diff = $requestWidth - $value;
-			if($diff < $tmpDiff || $tmpDiff == 0){
-				$tmpDiff = $diff;
-				$key = $query;
-			}
-		}
-		return $key+1; 			// +1 because columns-names run from 1 to 5 not from 0 to 4
-	}
+    foreach ($queries as $query => $value) {
+      $diff = $requestWidth - $value;
+      if($diff < $tmpDiff || $tmpDiff == 0){
+        $tmpDiff = $diff;
+        $key = $query;
+      }
+    }
+    return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
+  }
 }
 ?>
