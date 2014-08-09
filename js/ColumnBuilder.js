@@ -26,10 +26,11 @@ function buildColumn (columnName) {
     $('.images').remove();
     jQuery.each(requestResult[columnName], function(i,image){
       if(typeof image == 'object' && image !== null) {
-
         /* image position is in the users screensize -> image is visible */
-        if(image.posY <= winHeight+100) 
+        if(image.posY <= winHeight)
           html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:visible; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';
+        if(image.posY <= winHeight+300 && image.posY <= winHeight+900)
+          html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';  
       }
       else
         return false;
@@ -46,10 +47,12 @@ function addImgToColumn (columnName, scrollPos) {
     if(typeof image == 'object' && image !== null) {
       // image gets loaded but is hidden till user scrolls there
       if(image.posY <= scrollPos+900)
-        html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';  
+        html += '<a class="images" href="'+image.imgPath+'" title="'+image.imgName+'"><img class="images" style="position:absolute; top:'+image.posY+'px; left:'+image.posX+'px; height:'+image.height+'px; width:'+image.width+'px; visibility:hidden; " src="'+image.thumbPath+'" height="'+image.height+'" width="'+image.width+'"></a>';        
+      else
+        return;
     } 
     else
-      return false;
+      return;
   })
   $('#gallery').append(html);
   return;

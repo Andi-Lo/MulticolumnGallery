@@ -43,7 +43,8 @@ jQuery(document).ready(function($) {
       timeoutId = setTimeout(function(){
       /* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
       if(newScrollPos > scrollHeight){
-        scrollHeight += 100;
+        console.log(newScrollPos);
+        scrollHeight += 1;
         addImgToColumn(names[tmpColumn], newScrollPos);
         refreshScreenOnScroll(100);
       }

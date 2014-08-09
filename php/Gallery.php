@@ -89,10 +89,12 @@ class Gallery{
   {
     $tmpDiff = 0;
     $key = -1;
-
     foreach ($queries as $query => $value) {
+      if($requestWidth < $queries[0])
+        return 1;
       $diff = $requestWidth - $value;
-      if($diff < $tmpDiff || $tmpDiff == 0){
+      if($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0){
+
         $tmpDiff = $diff;
         $key = $query;
       }
