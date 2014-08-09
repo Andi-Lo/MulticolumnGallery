@@ -51,7 +51,7 @@ class Image{
 			$img->id = self::$_numOfElements;
 			$img->readMetadata($imgPath, $img);
 			self::$_numOfElements++;
-			$images[] = $img;       
+			$images[] = $img;
 		}
 		Image::osort($images);
 		return $images;

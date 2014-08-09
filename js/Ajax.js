@@ -16,6 +16,7 @@ var columns = 0;
 var names = "";
 var resize = "";
 var fadeIn = "";
+var columnHeight = "";
 
 /* ajax call for Gallery images*/
 $.ajax({
@@ -32,22 +33,20 @@ $.ajax({
 			names = requestResult['columnNames'];
 			resize = requestResult['resize'];
 			fadeIn = requestResult['fadeIn'];
-			
-			// for (var i = 0; i < columns; i++) {
-			// 	if(i == 0){
-			// 		buildColumn(names[i]);
-			// 		refreshScreen();
-			// 	}else{
-			// 		if(winWidth >= queries[i]){
-			// 			buildColumn(names[i]);
-			// 			refreshScreen();
-			// 		}
-			// 	}
-			// };
+			columnHeight = requestResult['columnHeight'];
+			activeColumn = requestResult['activeColumn']+"_Columns";
+			for (var i = 0; i < columns; i++) {
+				if(i == 0){
+					buildColumn(names[i]);
+					refreshScreen();
+				}else{
+					if(winWidth >= queries[i]){
+						buildColumn(activeColumn);
+						refreshScreen();
+					}
+				}
+			};
 
-			buildColumn(names[columns-1]);
-			refreshScreen();
-			
 		},
 		error: function(err) {
 			console.log("Ajax Error: "+ err);

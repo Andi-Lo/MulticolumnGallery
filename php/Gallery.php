@@ -15,9 +15,7 @@ require_once 'Column.php';
 require_once 'Config.php';
 require_once 'Image.php';
 
-if(! defined("CONFIG_PATH")) define('CONFIG_PATH', '../config/config.json');
-
-$config = new Config(CONFIG_PATH);
+$config = new Config();
 for ($i=0; $i < $config->number_of_columns; $i++) { 
 	if(! defined("COLUMN_".$i)) define("COLUMN_".$i, $i);
 }
@@ -47,6 +45,9 @@ class Gallery{
 		$column = new Column();
 		$images = new Image();
 		$images = $images->initializing();
+		$columnHeight = array();
+		$request = $_POST;
+		$requestWidth = $request['width'];
 
 		for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
 			if($i == 1){
@@ -56,18 +57,25 @@ class Gallery{
 			}
 		}
 
+		$queries = $column->calcQueries();
+		$activeColumn = self::calcActiveColumn($requestWidth, $queries);
+
 		self::$_columnContainer =
 			array(
-				'mediaQueries'  => $column->calcQueries(),
+				'mediaQueries'  => $queries,
 				'numOfColumns'  => NUM_OF_COLUMNS,
 				'columnNames'	  => $columnNames,
 				'resize'				=> $config->resize,
 				'fadeIn'        => $config->fadeIn,
+				'activeColumn'  => $activeColumn,
 			);
 
 		for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
 			self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
+			$columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
 		}
+
+		self::$_columnContainer['columnHeight'] = $columnHeight;
 		self::printJSON();
 	}
 
@@ -77,6 +85,19 @@ class Gallery{
 		echo (json_encode(self::$_columnContainer));
 	}
 
-}
+	public function calcActiveColumn($requestWidth, $queries)
+	{
+		$tmpDiff = 0;
+		$key = -1;
 
+		foreach ($queries as $query => $value) {
+			$diff = $requestWidth - $value;
+			if($diff < $tmpDiff || $tmpDiff == 0){
+				$tmpDiff = $diff;
+				$key = $query;
+			}
+		}
+		return $key+1; 			// +1 because columns-names run from 1 to 5 not from 0 to 4
+	}
+}
 ?>

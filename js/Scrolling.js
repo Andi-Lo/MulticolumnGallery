@@ -16,6 +16,7 @@ var innerWinHeight = $(window).innerHeight();
 var scrollHeight = innerWinHeight;
 var isInit = false;
 var winWidth = $(window).innerWidth();
+var timeoutId = 0;
 
 /* func to calculate if the picture visibility has to be changed */
 jQuery(document).ready(function($) {
@@ -23,31 +24,33 @@ jQuery(document).ready(function($) {
 		var newScrollPos = innerWinHeight + $(window).scrollTop();
 		if(newScrollPos > scrollPosSave){
 			scrollEvents++;
+
 			if(winWidth > 631 || isInit == false){
 				isInit = true;
 				refreshScreenOnScroll(100);
 			} 
 			else{
-				if(scrollEvents > 0 || isInit == false){
+				if(scrollEvents > 1 || isInit == false){
 					scrollEvents = 0;
 					isInit = true;
 					refreshScreenOnScroll(30);
 				}
 			}
+			/* lazy loading: Adds images depending on the Users scrolling position */
+			if(timeoutId ){
+				clearTimeout(timeoutId );  
+			}
+			timeoutId = setTimeout(function(){
+			/* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
+			if(newScrollPos > scrollHeight){
+				scrollHeight += 100;
+				addImgToColumn(names[tmpColumn], newScrollPos);
+				refreshScreenOnScroll(100);
+			}
+			else
+				return;
+			}, 50);
 		} 
-	});
-});
-
-/* lazy loading function: Adds images depending on the Users scrolling position */
-jQuery(document).ready(function($){
-	$(window).scroll(function() {
-		var newScrollPos = innerWinHeight + $(window).scrollTop();
-
-		/* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
-		if(newScrollPos > scrollPosSave &&  newScrollPos > scrollHeight){
-			scrollHeight += 300;
-			addImgToColumn(names[columns-1], newScrollPos);
-		}
 		else
 			return;
 	});

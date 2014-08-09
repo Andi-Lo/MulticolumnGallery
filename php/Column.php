@@ -38,9 +38,13 @@ class Column{
 				sort(self::$_columnHeight[$i]);
 			}
 		}
+
+		/* comment for präsentation*/
+		// print_r(self::$_columnHeight);
+		//  end
 	}
 
-	/* get a column with the given amount of columns back */
+	/* get a column with the given amount back */
 	public static function getColumn($numOfColumns, $images)
 	{
 		if(! self::$_init){
@@ -52,6 +56,12 @@ class Column{
 		if($numOfColumns >= 0){
 			foreach ($images as $img) {
 				$arr[] = Column::calcColumn($numOfColumns, $img);
+
+				/* comment for präsentation*/
+				// if($numOfColumns == 1){
+				// 	print_r(self::$_columnHeight[1]);
+				// }
+				// end
 			}
 		return $arr;
 		}else{
@@ -69,7 +79,7 @@ class Column{
 		$column->initProperties($column, $img);
 
 		/* one column */
-		if($columnNr == COLUMN_ONE){
+		if($columnNr == 0){
 			/* calculate margin left to display the column centered*/
 			$padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
 
