@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
         refreshScreenOnScroll(100);
       } 
       else{
-        if(scrollEvents > 1 || isInit == false){
+        if(winWidth < 631 || isInit == false){
           scrollEvents = 0;
           isInit = true;
           refreshScreenOnScroll(30);
@@ -42,14 +42,13 @@ jQuery(document).ready(function($) {
       }
       timeoutId = setTimeout(function(){
       /* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
-      if(newScrollPos > scrollHeight){
-        console.log(newScrollPos);
-        scrollHeight += 1;
+      // if(newScrollPos > scrollHeight){
+      //   scrollHeight += 1;
         addImgToColumn(names[tmpColumn], newScrollPos);
-        refreshScreenOnScroll(100);
-      }
-      else
-        return;
+        refreshScreenOnScroll(30);
+      // }
+      // else
+      //   return;
       }, 50);
     } 
     else
