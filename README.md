@@ -16,6 +16,7 @@ Show your best pictures to the world with a very minimalistic approach. No pictu
 ## <a name="Features"></a>Features
 * Lightweight
 * Responsive
+* Lazy loading
 * No database needed
 * Supports any number of columns
 * Use picture sizes that suits you best
