@@ -31,7 +31,6 @@ class Image{
   public $thumbnail = "";
   public $dateTaken = 0;
 
-  public static $_numOfElements = 0;
   public static $_thumbNames = array(); 
 
   public function initializing()
@@ -42,31 +41,41 @@ class Image{
     $names = $this->readDirectory(DIR_PATH_IMAGES);
     self::$_thumbNames = $this->readDirectory(DIR_PATH_THUMBNAILS);
 
+    if($config->shuffle === 'yes'){
+      shuffle($names);
+    }
+
     foreach($names as $value){
       $imgPath = DIR_PATH_IMAGES."$value";
       $img = new Image();
       $img->imgPath = PATH_IMAGES."$value";
       $img->imgName = $value;
       $img->thumbnail = $img->setThumbnailName($img);
-      $img->id = self::$_numOfElements;
       $img->readMetadata($imgPath, $img);
-      self::$_numOfElements++;
       $images[] = $img;
     }
 
-    if($config->shuffle == 'yes')
-      shuffle($names);
-    else
+    if($config->sortAfterDate === 'yes')
       usort($images, "dateTakenSort");
-  
+
+    self::setIds($images);
     return $images;
   }
+
+  public function setIds(&$images)
+  {
+    $id = 0;
+    foreach ($images as $image) { 
+      $image->id = $id;
+      $id++;
+    }
+  }
   
-  public function readDirectory($imagePath)
+  public function readDirectory($dirPath)
   {
     $names = array();
-    if(is_dir($imagePath)){
-      $scanned_directory = array_diff(scandir($imagePath), array('..', '.'));
+    if(is_dir($dirPath)){
+      $scanned_directory = array_diff(scandir($dirPath), array('..', '.'));
       foreach ($scanned_directory as $key => $value) {     
         $names[] = $value;
       }

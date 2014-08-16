@@ -26,7 +26,8 @@ class Config{
   public $center = 'yes';
   public $resize = 'yes';
   public $fadeIn = 'yes';
-  public $shuffle = 'yes';
+  public $shuffle = '';
+  public $sortAfterDate = '';
   private static $_config_path = '../config/config.json';
 
   function __construct()
@@ -47,6 +48,7 @@ class Config{
     $this->resize = $json['resize_columns'];
     $this->fadeIn = $json['fade_in_pictures'];
     $this->shuffle = $json['shuffle_pictures'];
+    $this->sortAfterDate = $json['sort_pictures_after_date_taken'];
   }
 }
 

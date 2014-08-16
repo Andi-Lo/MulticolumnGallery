@@ -94,7 +94,6 @@ class Gallery{
         return 1;
       $diff = $requestWidth - $value;
       if($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0){
-
         $tmpDiff = $diff;
         $key = $query;
       }
