@@ -113,11 +113,13 @@ class Image{
   public function getDateTaken($imgPath)
   {
     $exif = exif_read_data($imgPath, 0, true);
-    if($exif != false){
-      $dateTaken = $exif['EXIF']['DateTimeOriginal'];
-      return self::parseDateTaken($dateTaken);
-    }else
-      return 0;
+    if($exif !== null && $exif !== "undefined"){
+      if(!(empty($exif['EXIF']['DateTimeOriginal']))){
+        $dateTaken = $exif['EXIF']['DateTimeOriginal'];
+        return self::parseDateTaken($dateTaken);
+      }
+    }
+    return 0;
   }
 
   public function parseDateTaken($date)

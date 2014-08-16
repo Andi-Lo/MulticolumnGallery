@@ -24,12 +24,12 @@ $(function(){
         refreshScreen();
         return;
       } // handle the last column
-      if(winWidth >= queries[queries.length-1]){
+      else if(winWidth >= queries[queries.length-1]){
         buildColumn(names[columns-1]);
         refreshScreen();
         return;
       } // handle all other columns
-      if(winWidth >= queries[0]){
+      else if(winWidth >= queries[0]){
         for (var query = 0; query <= columns-1; query++){
           if(winWidth <= queries[query]){
             buildColumn(names[query-1]);

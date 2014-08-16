@@ -46,7 +46,7 @@ $.ajax({
           }
         }
       };
-
+      // alert(winWidth);
     },
     error: function(err) {
       console.log("Ajax Error: "+ err);
