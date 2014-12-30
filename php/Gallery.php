@@ -49,30 +49,43 @@ class Gallery{
     $request = $_POST;
     $requestWidth = $request['width'];
 
-    for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
-      if($i == 1){
-        $columnNames[] = $i.'_Column';
-      } else{
-        $columnNames[] = $i.'_Columns';
+    if($requestWidth < 768){
+      $columnNames[] = '1_Column';
+      $numOfColumns = 1;
+    } 
+    else {
+      for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
+        if($i == 1)
+          $columnNames[] = $i.'_Column';
+         else
+          $columnNames[] = $i.'_Columns';
       }
+      $numOfColumns = NUM_OF_COLUMNS;
     }
 
     $queries = $column->calcQueries();
+
     $activeColumn = self::calcActiveColumn($requestWidth, $queries);
 
     self::$_columnContainer =
       array(
         'mediaQueries'  => $queries,
-        'numOfColumns'  => NUM_OF_COLUMNS,
+        'numOfColumns'  => $numOfColumns,
         'columnNames'   => $columnNames,
         'resize'        => $config->resize,
         'fadeIn'        => $config->fadeIn,
         'activeColumn'  => $activeColumn,
       );
 
-    for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
-      self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
-      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
+    if ($requestWidth < 768) {
+      self::$_columnContainer[$columnNames[0]] = $column->getColumn(0, $images);
+      $columnHeight[] = end(self::$_columnContainer[$columnNames[0]])->posY;
+    }
+    else {
+      for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
+        self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
+        $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
+      }
     }
 
     self::$_columnContainer['columnHeight'] = $columnHeight;
@@ -90,10 +103,12 @@ class Gallery{
     $tmpDiff = 0;
     $key = -1;
     foreach ($queries as $query => $value) {
-      if($requestWidth < $queries[0])
+      if ($requestWidth < $queries[0])
         return 1;
+
       $diff = $requestWidth - $value;
-      if($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0){
+
+      if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
         $key = $query;
       }

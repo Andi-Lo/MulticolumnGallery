@@ -38,17 +38,14 @@ jQuery(document).ready(function($) {
       }
       /* lazy loading: Adds images depending on the Users scrolling position */
       if(timeoutId ){
-        clearTimeout(timeoutId );  
+        clearTimeout(timeoutId);  
       }
       timeoutId = setTimeout(function(){
       /* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
-      // if(newScrollPos > scrollHeight){
-      //   scrollHeight += 1;
-        addImgToColumn(names[tmpColumn], newScrollPos);
-        refreshScreenOnScroll(30);
-      // }
-      // else
-      //   return;
+
+      addImgToColumn(names[tmpColumn], newScrollPos);
+      refreshScreenOnScroll(30);
+
       }, 50);
     } 
     else
