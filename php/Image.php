@@ -133,9 +133,9 @@ class Image{
 
   public function parseDateTaken($date)
   {
-    $tmp = split(" ", $date);
+    $tmp = explode(" ", $date);
     $tmp = $tmp[0];
-    $tmp = split(":", $tmp);
+    $tmp = explode(":", $tmp);
     $date = $tmp[0].$tmp[1].$tmp[2];
     return $date;
   }
