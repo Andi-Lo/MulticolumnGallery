@@ -60,7 +60,7 @@ class Column{
   }
 
   /* calculate the image positions for each column */
-  public function calcColumn($columnNr, $img)
+  public static function calcColumn($columnNr, $img)
   {
     global $config;
     $request = $_POST;
