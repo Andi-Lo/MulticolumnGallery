@@ -52,6 +52,7 @@ class Image{
       $img->imgName = $value;
       $img->thumbnail = $img->setThumbnailName($img);
       $img->readMetadata($imgPath, $img);
+      $img->dateTaken = $img->getDateTaken($imgPath);
       $images[] = $img;
     }
 
@@ -61,6 +62,7 @@ class Image{
     self::setIds($images);
     return $images;
   }
+
 
   /**
    * Set unique image id's
@@ -87,7 +89,7 @@ class Image{
     // given path is a folder?
     if(is_dir($dirPath)){
 
-      // extract . .. childs from array
+      // extract ". .." childs from array
       $scanned_directory = array_diff(scandir($dirPath), array('..', '.'));
 
       // for every file in folder, get its names
@@ -99,6 +101,12 @@ class Image{
     } else echo "readDirectory failed: no such directory found<br>";
   }
 
+  /**
+   * Reads data out of an Image: width, height, type, attr (w*h)
+   * @param  [type] $imgPath [description]
+   * @param  [type] $img     [description]
+   * @return [type]          [description]
+   */
   public function readMetadata($imgPath, $img)
   {  
     list($width, $height, $type, $attr) = getimagesize($imgPath);
@@ -106,7 +114,6 @@ class Image{
     $img->height = $height;
     $img->type = $type;
     $img->attr = $attr;
-    $img->dateTaken = $img->getDateTaken($imgPath);
   }
 
   /**
@@ -162,25 +169,30 @@ class Image{
   /**
    * Gets the date of the image out of its metadata header
    * @param  string $imgPath Location of the image
-   * @return int             a number (jjjjmmtt) representing the date taken
+   * @return int             a number (jjjjmmtt) representing the date taken or -1 on error
    */
   public function getDateTaken($imgPath)
   {
-    $exif = exif_read_data($imgPath, 0, true);
+    // check for metadata header
+    if(exif_read_data($imgPath, 0, true) !== false) {
 
-    // if metadata header is found in file
-    if($exif !== null && $exif !== "undefined"){
+      $exif = exif_read_data($imgPath, 0, true);
 
-      // if datetaken property exists
-      if(!(empty($exif['EXIF']['DateTimeOriginal']))){
+      // if metadata header was found in file
+      if($exif !== null && $exif !== "undefined"){
 
-        $dateTaken = $exif['EXIF']['DateTimeOriginal'];
+        // if datetaken property exists
+        if(!(empty($exif['EXIF']['DateTimeOriginal']))){
 
-        // remove time stemp from String (e.g. "2012:04:23 21:13:29")
-        return self::parseDateTaken($dateTaken);
+          $dateTaken = $exif['EXIF']['DateTimeOriginal'];
+
+          // remove time stemp from String (e.g. "2012:04:23 21:13:29")
+          return self::parseDateTaken($dateTaken);
+        }
       }
+    } else {
+      return -1;
     }
-    return 0;
   }
 
   /**
