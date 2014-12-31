@@ -11,7 +11,7 @@ gulp.task('js', function () {
     gulp.src('js/*.js')
     	.pipe(concat('multiColumn.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist/js/'))
         .pipe(notify({ message: 'Finished minifying JavaScript'}));
 });
 
