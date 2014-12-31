@@ -2,35 +2,24 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="keywords" content="Multicolumn Gallery, Multicolumn Image Gallery, Image Gallery, Gallery, responsive, repsonsive image gallery, php, non-database, without sql, lightweight">
-    <meta itemprop="name" content="Multicolumn gallery : A lightweight php photo gallery" />
-    <meta itemprop="description" content="Multicolumn gallery is a minimalistic photo gallery written in PHP and released under MIT license. Easy to use, responsive, lightweight, minimalistic and no database needed!"/>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Multicolumngallery : Dynamic, customizable and responsive Image Gallery.">
 
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-53675712-1', 'auto');
-      ga('send', 'pageview');
-
-    </script>
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    
-    <title>Multicolumn gallery - A lightweight php photo gallery</title>
+
+    <title>Multicolumngallery</title>
   </head>
 
   <body>
+
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/bitHugger/MulticolumnGallery">View on GitHub</a>
 
-          <h1 id="project_title">Multicolumn gallery</h1>
-          <h2 id="project_tagline">The minimalistic approach of an image gallery!</h2>
+          <h1 id="project_title">Multicolumngallery</h1>
+          <h2 id="project_tagline">Dynamic, customizable and responsive Image Gallery.</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/bitHugger/MulticolumnGallery/zipball/master">Download this project as a .zip file</a>
@@ -43,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="multicolumngallery" class="anchor" href="#multicolumngallery"><span class="octicon octicon-link"></span></a>Multicolumn gallery</h1>
+<a id="multicolumngallery" class="anchor" href="#multicolumngallery" aria-hidden="true"><span class="octicon octicon-link"></span></a>MulticolumnGallery</h1>
 
 <ul>
 <li><a href="#Description">Description</a></li>
@@ -52,86 +41,158 @@
 <li><a href="#Requirements">Requirements</a></li>
 <li><a href="#Setup">Setup</a></li>
 <li><a href="#Resize">Resizing Images</a></li>
+<li><a href="#Documentation">Documentation</a></li>
 <li><a href="#License">License</a></li>
-</ul><h2>
-<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a><a name="Description"></a>Description</h2>
-
-<p>Multicolumn gallery is a minimalistic photo gallery written in PHP and released under MIT license. Easy to use, responsive, lightweight, minimalistic and no database needed!<br>
-Show your pictures to the world with a very minimalistic approach. You're just a few steps away!</p>
+</ul>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a><a name="Features"></a>Features</h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Description"></a>Description</h2>
+
+<p>Dynamic, customizable and responsive image gallery made with PHP and JS.<br>
+Show your best pictures to the world with a very minimalistic approach. No picture raiting, nor comments or taggin so your pictures stay in the spotlight!</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Features"></a>Features</h2>
 
 <ul>
 <li>Lightweight</li>
 <li>Responsive</li>
+<li>Lazy loading</li>
 <li>No database needed</li>
 <li>Supports any number of columns</li>
-<li>Use picture sizes that suit you best</li>
+<li>Use picture sizes that suits you best</li>
 <li>Position your gallery via a simple config file</li>
-</ul><h2>
-<a name="gallery-example" class="anchor" href="#gallery-example"><span class="octicon octicon-link"></span></a><a name="Gallery%20Example"></a>Gallery Example</h2>
+</ul>
+
+<h2>
+<a id="gallery-example" class="anchor" href="#gallery-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Gallery%20Example"></a>Gallery Example</h2>
 
 <p><a href="http://andreaslorer.de/">Gallery Demo</a></p>
 
 <h2>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a><a name="Requirements"></a>Requirements</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Requirements"></a>Requirements</h2>
 
-<p>If you want to run it on localhost first you need a server (like Xampp) of course</p>
+<p>Webserver with php or if you want to run it on localhost you need a server (like Xampp).</p>
 
 <h2>
-<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a><a name="Setup"></a>Setup</h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Setup"></a>Setup</h2>
 
-<p>Clone or download and unzip the repository to your website.<br>
-Include the following files in your HTML document. Make sure that the includes are in this order placed in your HTML <code>&lt;head&gt;</code>! (the JQuery library has to be loaded befor the javascript files) </p>
+<p>Clone or download and unzip the repository. Go to the "/dist"-folder and copy this file to your script files.<br>
+Get the following lines into your HTML document. 
+Make sure that the includes are the right order and placed just befor the closing <code>&lt;/body&gt;</code> tag! (JQuery has to be loaded befor the javascript files if you already have jquery on your site dont include it twice) </p>
 
-<div class="highlight highlight-html"><pre><span class="c">&lt;!-- JQuery library --&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="c">&lt;!-- Gallery core JS files --&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Ajax.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Scrolling.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/Resize.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/ColumnBuilder.js"</span> <span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;&lt;/script&gt;</span>
-</pre></div>
+<div class="highlight highlight-html"><pre><span class="pl-c">&lt;!-- JQuery library --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-c">&lt;!-- Gallery core JS file --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>yourPath/multiColumn.min.js<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
-<p>If you want a Lightbox (see <a href="http://dimsemenov.com/plugins/magnific-popup/">http://dimsemenov.com/plugins/magnific-popup/</a> for more infos or help) for your images enabled, include the following files into your HTML document:</p>
+<p>If you want a Lightbox (see <a href="http://dimsemenov.com/plugins/magnific-popup/">http://dimsemenov.com/plugins/magnific-popup/</a> for more infos or help) for your images enabled, include the following files into your HTML document: (make sure to have JQuery included befor the script tag)</p>
 
-<div class="highlight highlight-html"><pre><span class="c">&lt;!-- Magnific Popup core CSS file --&gt;</span>
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"assets/magnific-popup/magnific-popup.css"</span><span class="nt">&gt;</span> 
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">head</span>&gt;
+<span class="pl-c">&lt;!-- Magnific Popup core CSS file --&gt;</span>
+&lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s1"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific-popup.css<span class="pl-pds">"</span></span>&gt; 
+&lt;/<span class="pl-ent">head</span>&gt;
 
-<span class="c">&lt;!-- Magnific Popup core JS file --&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"assets/magnific-popup/magnific-popup.js"</span><span class="nt">&gt;&lt;/script&gt;</span> 
-</pre></div>
+<span class="pl-c">&lt;!-- make sure to have JQuery included befor this script tag --&gt;</span>
+<span class="pl-c">&lt;!-- Magnific Popup core JS file --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific-popup.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt; 
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
 
 <p>Add the following div-box into your HTML document</p>
 
-<div class="highlight highlight-html"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"gallery"</span> <span class="na">class=</span><span class="s">"popup-gallery"</span><span class="nt">&gt;</span>
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>gallery<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>popup-gallery<span class="pl-pds">"</span></span>&gt;
 
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"assets/magnific-popup/magnific.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="pl-s2">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
 
-<span class="nt">&lt;/div&gt;</span><span class="c">&lt;!-- ./popup-gallery --&gt;</span>
+&lt;/<span class="pl-ent">div</span>&gt;<span class="pl-c">&lt;!-- ./popup-gallery --&gt;</span>
 </pre></div>
 
 <p>Customize your gallery through the config file placed in /config/config.json<br>
-Add Images and Thumbnail into the appropriate folders:  </p>
+See Section: Documentation for more Information on how to use the config file.<br>
+Add Images and Thumbnail into the appropriate folders: </p>
 
 <ul>
-<li>Image files should be 1600*1200 to increase performance.</li>
-<li>Supported image formats are png, jpg, gif.</li>
-<li>thumbnails can be named thumb_imagename or need to have the same imagename.</li>
-<li>* e.g if the name is IMGP7001.jpg then your thumbnail needs to be named thumb_IMGP7001.jpg or IMGP7001.jpg</li>
-</ul><h2>
-<a name="resizing-images" class="anchor" href="#resizing-images"><span class="octicon octicon-link"></span></a><a name="resize"></a>Resizing Images</h2>
+<li>Image files dimensions should be 1600*1200 max to increase performance.</li>
+<li>Supported image formats are png, jpg.</li>
+<li>Thumbnails can be named yourPrefix_imagename, imagename_yourPostfix or a combination of both.</li>
+<li>If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed</li>
+<li>If you place them in an seperat folder they do not need a pre or postfix at all.</li>
+</ul>
+
+<h2>
+<a id="resizing-images" class="anchor" href="#resizing-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="resize"></a>Resizing Images</h2>
 
 <p>When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by <a href="http://www.imagemagick.org/index.php">ImageMagick</a>. Normally Unix comes with ImageMagick already installed you can check this by typing <code>$ identify -version</code>.</p>
 
-<p>Make a backup of your images befor you run this command!!! (If your pictures are in another file format, change *.jpg to the format you like e.g. *.png)</p>
+<p>Make a backup of your images befor you run this command!
+If your pictures are in another file format, change *.jpg to the format you like e.g. *.png</p>
 
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>mkdir images<span class="p">;</span> ls *.jpg <span class="p">|</span> xargs -r -I FILE   convert FILE -auto-orient -unsharp 0x0.5 -resize 1600x1200 -strip images/FILE <span class="o">&amp;&amp;</span> mkdir thumbs<span class="p">;</span> ls *.jpg <span class="p">|</span> xargs -r -I FILE   convert FILE -define jpeg:size<span class="o">=</span>760x760 -auto-orient -thumbnail 300 -unsharp 0x0.5 -strip thumbs/thumb_FILE
-</pre></div>
+<div class="highlight highlight-bash"><pre>$ mkdir images<span class="pl-k">;</span> ls <span class="pl-k">*</span>.jpg <span class="pl-k">|</span> xargs -r -I FILE   convert FILE -auto-orient -unsharp 0x0.5 -resize 1600x1200 -strip images/FILE <span class="pl-k">&amp;&amp;</span> mkdir thumbs<span class="pl-k">;</span> ls <span class="pl-k">*</span>.jpg <span class="pl-k">|</span> xargs -r -I FILE   convert FILE -define jpeg:size=760x760 -auto-orient -thumbnail 300 -unsharp 0x0.5 -strip thumbs/thumb_FILE</pre></div>
 
 <h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a><a name="License"></a>License</h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Documentation"></a>Documentation</h2>
+
+<p>A short documentation for the config.json file:  </p>
+
+<pre><code>{
+  "your_image_directory_path": "assets/images/",        // Your folder containing your images
+
+  "your_thumbnail_directory_path": "assets/thumbs/",    // Your folder containing the *thumbnails (*smaller
+                                                        // versions of your pictures)
+                                                        // Thumbnails can be placed in the same folder
+                                                        //   then your images if you pre or postfix them
+
+  "thumbnail_prefix": "thumb_",                         // Your prefix e.g thumb_myimage.jpg
+
+  "thumbnail_postfix": "",                              // Your postfix e.g myimage_thumb.jpg
+
+  "number_of_columns": "5",                             // How many columns you would like to have
+
+  "thumbnail_width": "300",                             // The image width of your thumbnails
+
+  "space_between_pictures": "10",                       // The white space between the pictures
+
+  "margin_left": "10",                                  // Spacing to the left border of your screen
+
+  "margin_left_hd": "180",                              // On bigger screens you can set an extra margin to
+                                                        //   center the gallery
+
+  "margin_top": "70",                                   // Spacing from top till the beginning of the gallery
+
+  "margin_right": "0",                                  // Margin to right border of the screen
+
+  "center_column": "yes",                               // Yes / No, centeres the gallery if you have 5 columns
+
+  "resize_columns": "yes",                              // Yes / No, disables responsive behavior
+
+  "fade_in_pictures": "yes",                            // On scrolling down the page you get an fade in animation
+                                                        // disalbe this option if you have performance issues.
+
+  "shuffle_pictures": "no",                             // Yes / No, Shuffles pictures to always display
+                                                        // different ones on page reload or if a user revisits 
+                                                        // your site. If value "No" is chosen the pictures are 
+                                                        // sorted by their names
+
+  "sort_pictures_after_date_taken": "yes"               // Yes / No If your pictures got metadata you can sort 
+                                                        // your pictures by the date you took them.
+                                                        // However if you optimized them for the web, your programm
+                                                        // might have removed the metadata header and removed those
+                                                        // information.
+}
+
+</code></pre>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="License"></a>License</h2>
 
 <p>Released under the <a href="http://opensource.org/licenses/MIT">MIT License</a></p>
       </section>
@@ -145,7 +206,17 @@ Add Images and Thumbnail into the appropriate folders:  </p>
       </footer>
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-53675712-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
 
   </body>
 </html>
