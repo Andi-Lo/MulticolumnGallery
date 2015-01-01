@@ -95,6 +95,11 @@ class Gallery{
   public function printJSON()
   {
     header("content-type:application/json");
+
+    // caching would work this way, need to validate when to recalculate and when serve from cache
+    // file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
+    // $s = json_decode(file_get_contents('cache/cache.json'));
+    // echo (json_encode($s));
     echo (json_encode(self::$_columnContainer));
   }
 
