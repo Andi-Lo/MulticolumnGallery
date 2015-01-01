@@ -31,7 +31,7 @@ Show your best pictures to the world with a very minimalistic approach. No pictu
 Webserver with php or if you want to run it on localhost you need a server (like Xampp).
 
 ## <a name="Setup"></a>Setup
-Clone or download and unzip the repository. Go to the "/dist"-folder and copy this file to your script files.  
+Clone or download and unzip the repository. Browse the "dist/"-folder and copy those file into your project or website.  
 Get the following lines into your HTML document. 
 Make sure that the includes are the right order and placed just befor the closing `</body>` tag! (JQuery has to be loaded befor the javascript files if you already have jquery on your site dont include it twice) 
 ```html
