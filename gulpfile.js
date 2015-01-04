@@ -22,7 +22,8 @@ gulp.task('copy', function () {
   return gulp.src([
   	'app/**/*',
   	'!app/assets/**/*.jpg',
-  	'!app/js/*.js'
+  	'!app/js/*.js',
+    '!app/index.html'
   	],{
   	 dot:true
   	}).pipe(gulp.dest('dist'))

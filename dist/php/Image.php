@@ -123,20 +123,27 @@ class Image{
 
       // for every file in folder, get its names
       foreach ($scanned_directory as $key => $value) {
-        // search is true when thumbnails and images are set in same folder via config.json file
-        if($search === true){
 
-          // if prefix or postfix is not found, sort it into "names" array
-          $pos = (strpos($value, $findme));
-          if($pos !== 0)
-            $names[] = $value; 
-          // else its a thumbnail belonging to an image
-          else 
-            self::$_thumbNames[] = $value;
-          
+        // if the readed file is actually an image
+        if(Image::isImage($value)) {
 
-        } else {
-          $names[] = $value;
+          // search is true when thumbnails and images are set in same folder via config.json file
+          if($search === true){
+  
+            // if prefix or postfix is not found, sort it into "names" array
+            $pos = (strpos($value, $findme));
+
+            if($pos !== 0)
+              $names[] = $value; 
+
+            // else its a thumbnail belonging to an image
+            else 
+              self::$_thumbNames[] = $value;
+            
+          } else {
+            $names[] = $value;
+          }
+
         }
       }
       return $names;
@@ -183,40 +190,63 @@ class Image{
       // for file ending in files
       foreach ($findme as $format) {
 
-        // is imagename is name.jpg/png/.. ?
-        if(strpos($img->imgName, $format)){
+        // for thumbnail in thumbnails
+        foreach (self::$_thumbNames as $thumb_name) {
 
-          // for thumbnail in thumbnails
-          foreach (self::$_thumbNames as $thumb_name) {
+          // $pos is the string position of the file type e.g. .jpg
+          $pos = strpos($img->imgName, $format);
 
-            // $pos is the string position of the file type e.g. .jpg
-            $pos = strpos($img->imgName, $format);
+          // extract file name from file.type
+          $substring = substr($img->imgName, 0, $pos);
 
-            // extract file name from file.type
-            $substring = substr($img->imgName, 0, $pos);
+          // if Thumbnail name was found in folder
+          if($prefix.$substring.$postfix.$format == $thumb_name) {
 
-            // if Thumbnail name was found in folder
-            if($prefix.$substring.$postfix.$format == $thumb_name) {
+          // set thumbnail path
+            $img->thumbnailPath = PATH_THUMBNAILS.                        
+                $prefix.$substring.$postfix.$format;
 
-            // set thumbnail path
-              $img->thumbnailPath = PATH_THUMBNAILS.                        
-                  $prefix.$substring.$postfix.$format;
+            // return thumbnail name as string (bsp: prefix+myimagename+postfix.jpg)
+            return $prefix.$substring.$postfix.$format;
+          } /* maybe not needed cause of config file */
+          elseif($substring.$format == $thumb_name) {
+            $img->thumbnailPath = PATH_THUMBNAILS.$substring.$format;
 
-              // return thumbnail name as string (bsp: prefix+myimagename+postfix.jpg)
-              return $prefix.$substring.$postfix.$format;
-            } /* maybe not needed cause of config file */
-            elseif($substring.$format == $thumb_name) {
-              $img->thumbnailPath = PATH_THUMBNAILS.$substring.$format;
-
-              // return thumbnail name as string (bsp: thumb_IMG2342.jpg)
-              return $substring.$format;
-            }
+            // return thumbnail name as string (bsp: thumb_IMG2342.jpg)
+            return $substring.$format;
           }
         }
       }
     }
     // no thumbnail for given image file found
     return "file_not_found";
+  }
+
+
+  /**
+   * Checks if the given file is an Image based on its Datatype
+   * @param  String $filename
+   * @return boolean          true if image else false
+   */
+  public function isImage($filename)
+  {
+    // supported image formats
+    $supportedFormats = array('.jpg','.jpeg','.png');
+
+    // make sure JPG and jpg doesnt matter
+    $toLowerCase = strtolower ($filename);
+
+    // for every supported image format 
+    foreach ($supportedFormats as $format) {
+
+      // see if one of the file endings is found
+      if(strpos($filename, $format))
+        return true;
+
+      // file format not found 
+      else 
+        return false;
+    }
   }
 
   /**
@@ -244,7 +274,7 @@ class Image{
         }
       }
     } else {
-      return -1;
+      return false;
     }
   }
 
