@@ -49,6 +49,19 @@ class Gallery{
     $request = $_POST;
     $requestWidth = $request['width'];
 
+    if($config->caching == "yes") {
+      $serveFromCache = -1;
+      $serveFromCache = Gallery::getFromCache(DIR_PATH_IMAGES);
+
+      if($serveFromCache == true) {
+        if(Gallery::serveFromCache()){
+          return;
+        }
+      } else {
+        Gallery::printJSON();
+      }
+    }
+
     if($requestWidth < 768){
       $columnNames[] = '1_Column';
       $numOfColumns = 1;
@@ -94,12 +107,22 @@ class Gallery{
 
   public function printJSON()
   {
+    global $config;
     header("content-type:application/json");
-
-    // caching would work this way, need to validate when to recalculate and when serve from cache
-    // file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-    // $s = json_decode(file_get_contents('cache/cache.json'));
-    // echo (json_encode($s));
+    if($config->caching == "yes"){
+      // write to cache file to reuse without recalculation
+      if(file_exists("cache/cache.json")){
+        file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
+        // Gallery::debugConsole('caching was on');
+      } 
+      // create a new file if doesnt exist and write to it
+      else {
+        $newJsonFile = fopen('cache/cache.json', 'w');
+        fclose($newJsonFile);
+        file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
+        // Gallery::debugConsole('caching was on but file didnt exist so i created one');
+      }
+    }
     echo (json_encode(self::$_columnContainer));
   }
 
@@ -119,6 +142,61 @@ class Gallery{
       }
     }
     return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
+  }
+
+  public function serveFromCache()
+  {
+    if(file_exists('cache/cache.json')){
+      header("content-type:application/json");
+      $s = json_decode(file_get_contents('cache/cache.json'));
+      echo (json_encode($s));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * check if file names in folder are the same as in the cache, if yes serve
+   * files from the cache, else recalculate columns
+   * @param  String $path path to the Folder you want to read the names of
+   * @return boolean      true if file names did not change; false if they are different
+   */
+  public function getFromCache($path)
+  {
+    $names = array();
+    $names = Image::readDirectory($path);
+    return Gallery::compareCache($names);
+  }
+
+  /**
+   * compares if the cached file is the same as the given input
+   * @param  array $names 
+   * @return boolean        true if same else false
+   */
+  public function compareCache($names)
+  {
+    if(file_exists("cache/names.json")) {
+      $compareNames = json_decode(file_get_contents('cache/names.json'));
+      if($compareNames == $names) {
+        // Gallery::debugConsole("hurray we are same!");
+        return true;
+      } else {
+        // Gallery::debugConsole("we are not same");
+        file_put_contents('cache/names.json', json_encode($names));
+        return false;
+      }
+    } else {
+      $newJsonFile = fopen('cache/names.json', 'w');
+      fclose($newJsonFile);
+      file_put_contents('cache/names.json', json_encode($names));
+      return false;
+    }
+  }
+
+  public function debugConsole($data)
+  {
+    echo $data." \n";
   }
 }
 ?>

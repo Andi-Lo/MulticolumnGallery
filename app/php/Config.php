@@ -28,6 +28,7 @@ class Config{
   public $fadeIn = 'yes';
   public $shuffle = '';
   public $sortAfterDate = '';
+  public $caching = '';
   private static $_config_path = '../config/config.json';
 
   function __construct()
@@ -49,6 +50,7 @@ class Config{
     $this->fadeIn = $json['fade_in_pictures'];
     $this->shuffle = $json['shuffle_pictures'];
     $this->sortAfterDate = $json['sort_pictures_after_date_taken'];
+    $this->caching = $json['set_cache_on'];
   }
 }
 
