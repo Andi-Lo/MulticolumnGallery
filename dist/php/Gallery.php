@@ -50,15 +50,17 @@ class Gallery{
     $requestWidth = $request['width'];
 
     if($config->caching == "yes") {
-      $serveFromCache = -1;
-      $serveFromCache = Gallery::getFromCache(DIR_PATH_IMAGES);
+      $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
+      $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
+      $configNames = json_decode(file_get_contents('../config/config.json'));
+      $confNotChanged = Gallery::compareCache($configNames, 'cache/config.json');
 
-      if($serveFromCache == true) {
+      // var_dump($confNotChanged);
+
+      if(($serveFromCache === true) && ($confNotChanged === true)) {
         if(Gallery::serveFromCache()){
           return;
         }
-      } else {
-        Gallery::printJSON();
       }
     }
 
@@ -150,7 +152,6 @@ class Gallery{
     return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
   }
 
-
   /**
    * Creates a file with the given name
    * @param  String $filename
@@ -184,38 +185,25 @@ class Gallery{
   }
 
   /**
-   * check if file names in folder are the same as in the cache, if yes serve
-   * files from the cache, else recalculate columns
-   * @param  String $path path to the Folder you want to read the names of
-   * @return boolean      true if file names did not change; false if they are different
-   */
-  public function getFromCache($path)
-  {
-    $names = array();
-    $names = Image::readDirectory($path);
-    return Gallery::compareCache($names);
-  }
-
-  /**
    * compares if the cached file is the same as the given input
    * @param  array $names 
    * @return boolean        true if same else false
    */
-  public function compareCache($names)
+  public function compareCache($names, $cachedName)
   {
-    if(file_exists("cache/names.json")) {
-      $compareNames = json_decode(file_get_contents('cache/names.json'));
+    if(file_exists($cachedName)) {
+      $compareNames = json_decode(file_get_contents($cachedName));
       if($compareNames == $names) {
         // hurray we are same!"
         return true;
       } else {
         // we are not same :(
-        file_put_contents('cache/names.json', json_encode($names));
+        file_put_contents($cachedName, json_encode($names));
         return false;
       }
     } else {
-      if(Gallery::createFile('cache/names.json')){
-        file_put_contents('cache/names.json', json_encode($names));
+      if(Gallery::createFile($cachedName)){
+        file_put_contents($cachedName, json_encode($names));
         return true;
       }
       return false;
