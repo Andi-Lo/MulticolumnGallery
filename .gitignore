@@ -3,5 +3,6 @@ node_modules
 *.jpg
 *.png
 *.jpeg
-cache/*.json
+app/php/cache/*.json
+dist/php/cache/*.json
 !.gitkeep
