@@ -3,5 +3,6 @@ node_modules
 *.jpg
 *.png
 *.jpeg
+<<<<<<< HEAD
 cache
 !.gitkeep

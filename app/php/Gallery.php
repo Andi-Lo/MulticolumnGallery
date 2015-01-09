@@ -150,7 +150,6 @@ class Gallery{
     return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
   }
 
-
   /**
    * Creates a file with the given name
    * @param  String $filename
