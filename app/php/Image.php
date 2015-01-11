@@ -88,7 +88,7 @@ class Image{
    * @param  string $dirPath the folder to read
    * @return string[]        names of files in folder or FALSE on error  
    */
-  public function readDirectory($dirPath)
+  public static function readDirectory($dirPath)
   {
     $names = array();
     global $config;
@@ -228,7 +228,7 @@ class Image{
    * @param  String $filename
    * @return boolean          true if image else false
    */
-  public function isImage($filename)
+  public static function isImage($filename)
   {
     // supported image formats
     $supportedFormats = array('.jpg','.jpeg','.png');
@@ -257,9 +257,9 @@ class Image{
   public function getDateTaken($imgPath)
   {
     // check for metadata header
-    if(exif_read_data($imgPath, 0, true) !== false) {
+    if(@exif_read_data($imgPath, 0, true) !== false) {
 
-      $exif = exif_read_data($imgPath, 0, true);
+      $exif = @exif_read_data($imgPath, 0, true);
 
       // if metadata header was found in file
       if($exif !== null && $exif !== "undefined"){
