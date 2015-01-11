@@ -49,13 +49,11 @@ class Gallery{
     $request = $_POST;
     $requestWidth = $request['width'];
 
-    if($config->caching == "yes") {
+    if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
       $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
       $configNames = json_decode(file_get_contents('../config/config.json'));
       $confNotChanged = Gallery::compareCache($configNames, 'cache/config.json');
-
-      // var_dump($confNotChanged);
 
       if(($serveFromCache === true) && ($confNotChanged === true)) {
         if(Gallery::serveFromCache()){
@@ -111,18 +109,15 @@ class Gallery{
   {
     global $config;
     header("content-type:application/json");
-    if($config->caching == "yes"){
+    if($config->caching == "yes" && $config->shuffle != "yes"){
       // write to cache file to reuse without recalculation
       if(file_exists("cache/cache.json")){
         file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-        // Gallery::debugConsole('caching was on');
       } 
       // create a new file if doesnt exist and write to it
       else {
-        $newJsonFile = fopen('cache/cache.json', 'w');
-        fclose($newJsonFile);
+        self::createFile('cache/cache.json');
         file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-        // Gallery::debugConsole('caching was on but file didnt exist so i created one');
       }
     }
     echo (json_encode(self::$_columnContainer));

@@ -49,13 +49,11 @@ class Gallery{
     $request = $_POST;
     $requestWidth = $request['width'];
 
-    if($config->caching == "yes") {
+    if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
       $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
       $configNames = json_decode(file_get_contents('../config/config.json'));
       $confNotChanged = Gallery::compareCache($configNames, 'cache/config.json');
-
-      // var_dump($confNotChanged);
 
       if(($serveFromCache === true) && ($confNotChanged === true)) {
         if(Gallery::serveFromCache()){
@@ -111,39 +109,45 @@ class Gallery{
   {
     global $config;
     header("content-type:application/json");
-    if($config->caching == "yes"){
+    if($config->caching == "yes" && $config->shuffle != "yes"){
       // write to cache file to reuse without recalculation
       if(file_exists("cache/cache.json")){
         file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-        // Gallery::debugConsole('caching was on');
       } 
       // create a new file if doesnt exist and write to it
       else {
-        $newJsonFile = fopen('cache/cache.json', 'w');
-        fclose($newJsonFile);
+        self::createFile('cache/cache.json');
         file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-        // Gallery::debugConsole('caching was on but file didnt exist so i created one');
       }
     }
     echo (json_encode(self::$_columnContainer));
   }
 
   /**
+   * Returns the number of columns that can be displayed on the clients screen
    * 
-   * @param  [type] $requestWidth [description]
-   * @param  [type] $queries      [description]
-   * @return [type]               [description]
+   * Example: if the config has "number_of_columns" set to 5 but the screen of the user
+   * is not big enough to display 5, it will calculate the appropriate number
+   * @param  int $requestWidth clients screen width
+   * @param  array $queries    the calculated queries for every column
+   * @return int               an integer ranging from 1 to "number_of_columns" defined in config
    */
   public function calcActiveColumn($requestWidth, $queries)
   {
+    // init variables
     $tmpDiff = 0;
     $key = -1;
+
+    // for every media query in the array
     foreach ($queries as $query => $value) {
+
+      // when clients screen is smaller then the smallest query (e.g. 320px)
+      // return that the active column is 1
       if ($requestWidth < $queries[0])
         return 1;
 
+      // find the smallest difference
       $diff = $requestWidth - $value;
-
       if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
         $key = $query;
