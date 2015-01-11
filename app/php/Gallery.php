@@ -129,21 +129,30 @@ class Gallery{
   }
 
   /**
+   * Returns the number of columns that can be displayed on the clients screen
    * 
-   * @param  [type] $requestWidth [description]
-   * @param  [type] $queries      [description]
-   * @return [type]               [description]
+   * Example: if the config has "number_of_columns" set to 5 but the screen of the user
+   * is not big enough to display 5, it will calculate the appropriate number
+   * @param  int $requestWidth clients screen width
+   * @param  array $queries    the calculated queries for every column
+   * @return int               an integer ranging from 1 to "number_of_columns" defined in config
    */
   public function calcActiveColumn($requestWidth, $queries)
   {
+    // init variables
     $tmpDiff = 0;
     $key = -1;
+
+    // for every media query in the array
     foreach ($queries as $query => $value) {
+
+      // when clients screen is smaller then the smallest query (e.g. 320px)
+      // return that the active column is 1
       if ($requestWidth < $queries[0])
         return 1;
 
+      // find the smallest difference
       $diff = $requestWidth - $value;
-
       if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
         $key = $query;
