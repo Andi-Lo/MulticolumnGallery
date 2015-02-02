@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Demopage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Demopage</title>
 
   <!-- Magnific Popup core CSS file -->
-  <link rel="stylesheet" href="../dist/assets/magnific-popup/magnific-popup.css">
+  <link rel="stylesheet" href="assets/magnific-popup/magnific-popup.css">
 
 </head>
 
@@ -28,7 +30,7 @@
                     gallery: {
                         enabled: true,
                         navigateByImgClick: true,
-                        preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+                            preload: [0,1] // Will preload 0 - before current, and 1 after the current image
                     },
                     image: {
                         cursor: 'null',
@@ -40,9 +42,11 @@
                     }
                 });
             });
-            head.load("https://code.jquery.com/jquery-migrate-1.2.1.min.js");
-            head.load("../dist/js/multiColumn.min.js");
-            head.load("../dist/assets/magnific-popup/magnific-popup.js");
+            head.load("assets/js/Ajax.js");
+            head.load("assets/js/ColumnBuilder.js");
+            head.load("assets/js/Resize.js");
+            head.load("assets/js/Scrolling.js");
+            head.load("assets/magnific-popup/magnific-popup.js");
         });
     </script>
 </body>

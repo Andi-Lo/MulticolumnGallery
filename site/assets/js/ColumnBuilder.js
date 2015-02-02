@@ -32,7 +32,7 @@ function buildColumn(columnName) {
           html += '<a class="images" href="' + image.imgPath + '" title="' + image.imgName + '"><img class="images" style="position:absolute; top:' + image.posY + 'px; left:' + image.posX + 'px; height:' + image.height + 'px; width:' + image.width + 'px; visibility:hidden; " src="' + image.thumbPath + '" height="' + image.height + '" width="' + image.width + '"></a>';
       } else
         return false;
-    })
+    });
     $('#gallery').append(html);
 
     return;
@@ -59,7 +59,8 @@ function addImgToColumn(columnName, scrollPos) {
         return;
     } else
       return;
-  })
+  });
+
   $('#gallery').append(html);
   return;
 } // end addImgToColumn

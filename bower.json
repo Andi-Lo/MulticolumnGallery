@@ -1,0 +1,21 @@
+{
+  "name": "multicolumnGallery",
+  "version": "0.1.0",
+  "homepage": "https://github.com/bitHugger/MulticolumnGallery",
+  "authors": [
+    "Andreas Lorer <contact@andreaslorer.de>"
+  ],
+  "keywords": [
+    "column",
+    "multicolumn"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components/",
+    "test",
+    "tests"
+  ]
+}

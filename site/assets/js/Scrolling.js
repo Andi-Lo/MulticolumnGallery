@@ -25,12 +25,12 @@ jQuery(document).ready(function($) {
     if(newScrollPos > scrollPosSave){
       scrollEvents++;
 
-      if(winWidth > 631 || isInit == false){
+      if(winWidth > 631 || isInit === false){
         isInit = true;
         refreshScreenOnScroll(100);
       } 
       else{
-        if(winWidth < 631 || isInit == false){
+        if(winWidth < 631 || isInit === false){
           scrollEvents = 0;
           isInit = true;
           refreshScreenOnScroll(30);
@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
 $(function(){
   $(window).resize(function(){
     winWidth = $(window).innerWidth();
-  })
+  });
 });
 
 /*changes the css-visibility value of the images if it has to be set to visible*/

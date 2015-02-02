@@ -31,15 +31,15 @@ $.ajax({
       var winWidth = $(window).width();
       var winHeight = $(window).height();
       requestResult = json;
-      columns = requestResult['numOfColumns'];
-      queries = requestResult['mediaQueries'];
-      names = requestResult['columnNames'];
-      resize = requestResult['resize'];
-      fadeIn = requestResult['fadeIn'];
-      columnHeight = requestResult['columnHeight'];
-      activeColumn = requestResult['activeColumn']+"_Columns";
+      columns = requestResult.numOfColumns;
+      queries = requestResult.mediaQueries;
+      names = requestResult.columnNames;
+      resize = requestResult.resize;
+      fadeIn = requestResult.fadeIn;
+      columnHeight = requestResult.columnHeight;
+      activeColumn = requestResult.activeColumn +"_Columns";
       for (var i = 0; i < columns; i++) {
-        if(i == 0){
+        if(i === 0){
           buildColumn(names[i]);
           $( ".ajax-loading" ).css('display', 'none');
           refreshScreen();
@@ -50,7 +50,7 @@ $.ajax({
             refreshScreen();
           }
         }
-      };
+      }
     },
     error: function(err) {
       console.log("Ajax Error: "+ err);

@@ -175,6 +175,8 @@ class Gallery{
   /**
    * Sends Images to the Client from Cache
    * @return boolean true on success else false
+   * @todo   http://stackoverflow.com/questions/17612962/possible-to-cache-json-to-increase-performance-load-time
+   * caching not working if stored on server. Has to be stored on client
    */
   public function serveFromCache()
   {
