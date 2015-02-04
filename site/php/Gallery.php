@@ -38,6 +38,7 @@ new Gallery();
 class Gallery{
 
   public static $_columnContainer = array();
+  private static $_numOfColumns = -1;
   
   function __construct()
   {
@@ -48,6 +49,9 @@ class Gallery{
     $columnHeight = array();
     $request = $_POST;
     $requestWidth = $request['width'];
+    $galleryWidth = $request['galleryWidth'];
+    $columnNames = array();
+    $numOfCOlumns = -1;
 
     if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
@@ -62,23 +66,20 @@ class Gallery{
       }
     }
 
-    if($requestWidth < 768){
-      $columnNames[] = '1_Column';
-      $numOfColumns = 1;
-    } 
-    else {
-      for ($i=1; $i <= NUM_OF_COLUMNS; $i++) { 
-        if($i == 1)
-          $columnNames[] = $i.'_Column';
-         else
-          $columnNames[] = $i.'_Columns';
-      }
-      $numOfColumns = NUM_OF_COLUMNS;
+    self::setNumOfColumns($galleryWidth);
+    $numOfColumns = self::getNumOfColumns();
+
+    // set the column Names (1_Column to n_Columns)
+    for ($i=1; $i <= $numOfColumns; $i++) { 
+      if($i == 1)
+        $columnNames[] = $i.'_Column';
+       else
+        $columnNames[] = $i.'_Columns';
     }
 
     $queries = $column->calcQueries();
 
-    $activeColumn = self::calcActiveColumn($requestWidth, $queries);
+    $activeColumn = self::calcActiveColumn($galleryWidth, $queries);
 
     self::$_columnContainer =
       array(
@@ -90,19 +91,32 @@ class Gallery{
         'activeColumn'  => $activeColumn,
       );
 
-    if ($requestWidth < 768) {
-      self::$_columnContainer[$columnNames[0]] = $column->getColumn(0, $images);
-      $columnHeight[] = end(self::$_columnContainer[$columnNames[0]])->posY;
-    }
-    else {
-      for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
-        self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
-        $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
-      }
+    for ($i=0; $i < $numOfColumns; $i++) {
+      self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
+      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
     }
 
     self::$_columnContainer['columnHeight'] = $columnHeight;
     self::printJSON();
+  }
+
+  private function setNumOfColumns($galleryWidth) {
+    $galleryWidth = $galleryWidth - PAD;
+    $onePicture = PAD_LEFT_HD + THUMB_WIDTH + PAD;
+    $nPictures = THUMB_WIDTH + PAD;
+
+    if($galleryWidth >= $onePicture) {
+      $tmp = $galleryWidth / $nPictures;
+      $numOfColumns = intval($tmp);
+      self::$_numOfColumns = $numOfColumns;
+    } 
+    else {
+      self::$_numOfColumns = 1;
+    }
+  }
+
+  public function getNumOfColumns() {
+    return self::$_numOfColumns;
   }
 
   public function printJSON()
@@ -143,8 +157,9 @@ class Gallery{
 
       // when clients screen is smaller then the smallest query (e.g. 320px)
       // return that the active column is 1
-      if ($requestWidth < $queries[0])
+      if ($requestWidth < $queries[0]){
         return 1;
+      }
 
       // find the smallest difference
       $diff = $requestWidth - $value;
@@ -164,10 +179,12 @@ class Gallery{
   public function createFile($filename)
   {
     if(!(file_exists($filename))){
+
       $newFile = fopen($filename, 'w');
       fclose($newFile);
       return true;
-    } else {
+    } 
+    else {
       return false;
     }
   }
