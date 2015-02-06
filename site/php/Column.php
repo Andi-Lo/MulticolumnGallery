@@ -52,7 +52,7 @@ class Column{
 
     if($numOfColumns >= 0){
       foreach ($images as $img) {
-        $arr[] = @Column::calcColumn($numOfColumns, $img);
+        $arr[] = Column::calcColumn($numOfColumns, $img);
       }
     return $arr;
     }else{
