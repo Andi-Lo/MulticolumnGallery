@@ -29,9 +29,10 @@ class Column{
   public static $_columnHeight = array();     // contains all column heights
 
   /* Build an dynamic sized container array to store the height of each column */
-  private static function initClass($numOfColumns)
+  private static function initClass()
   {
-    for ($i=0; $i < NUM_OF_COLUMNS; $i++) { 
+    $numOfColumns = Gallery::getNumOfColumns();
+    for ($i=0; $i < $numOfColumns; $i++) { 
       self::$_columnHeight[$i][$i] = PAD_TOP;
       for ($j=0; $j < $i+1; $j++) { 
         self::$_columnHeight[$i][$j] = PAD_TOP;
@@ -45,7 +46,7 @@ class Column{
   {
     if(! self::$_init){
       self::$_init = true;
-      Column::initClass($numOfColumns);
+      Column::initClass();
     }
     $arr = array();
 
@@ -64,6 +65,7 @@ class Column{
   {
     global $config;
     $request = $_POST;
+    $galleryWidth = $request['galleryWidth'];
     $column = new Column();
     $column->calcDispVal($img, THUMB_WIDTH);
     $column->initProperties($column, $img);
@@ -71,12 +73,12 @@ class Column{
     /* one column */
     if($columnNr == 0){
       /* calculate margin left to display the column centered*/
-      $padLeft = ($request['width'] - THUMB_WIDTH - PAD)/2;
+      $padLeft = ($galleryWidth - THUMB_WIDTH - PAD)/2;
 
       $column->posY = self::$_columnHeight[COLUMN_ONE][0];
       
       /* screen width is too small for 2 pictures, display 1 column centered */
-      if($request['width'] < (PAD_LEFT_HDR + THUMB_WIDTH*2 + PAD*2)){
+      if($galleryWidth < (PAD_LEFT_HDR + THUMB_WIDTH*2 + PAD*2)){
         $column->posX = $padLeft;
       }
       else{
@@ -86,13 +88,13 @@ class Column{
       return $column;
     } /* more then one column */
     else{
-      if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
-        $padLeft = ($request['width'] - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
+      if($config->center == 'yes' && $galleryWidth >= GALLERY_SIZE){
+        $padLeft = ($galleryWidth - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
       }else{
         $padLeft = PAD_LEFT_HDR;
       }
 
-      /* sorts the array low to heigh while keeping its key => value structure. 
+      /* sorts the array low to high while keeping its key => value structure. 
       Index 0 represents the column with the least height so the image will be placed there */
       asort(self::$_columnHeight[$columnNr]);
       /* reset the array pointer so it points to index 0 */
@@ -153,17 +155,18 @@ class Column{
     $result = 0;
     $request = $_POST;
     $padLeft = 0;
+    $numOfColumns = Gallery::getNumOfColumns();
 
     if($config->center == 'yes' && $request['width'] >= GALLERY_SIZE){
-      $padLeft = ($request['width'] - ((NUM_OF_COLUMNS)*THUMB_WIDTH) - ((NUM_OF_COLUMNS)*PAD))/2;
+      $padLeft = ($request['width'] - (($numOfColumns)*THUMB_WIDTH) - (($numOfColumns)*PAD))/2;
     }else{
       $padLeft = PAD_LEFT_HDR;
     }
 
     /* for each column, calculate the size of the gallery to specify media queries */
-    for ($column = 1; $column <= NUM_OF_COLUMNS; $column++) {
+    for ($column = 1; $column <= $numOfColumns; $column++) {
         /* its the max column (n) */
-      if($column == NUM_OF_COLUMNS){
+      if($column == $numOfColumns){
         $result = $padLeft + ($column * THUMB_WIDTH) + PAD + ($column * PAD);
       } /* its the min column (1) */
       elseif($column == 1){
