@@ -18,14 +18,15 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 var browserify = require('browserify');
+var uncss = require('gulp-uncss');
 
-var site = 'http://example.com';
+var site = 'http://www.andreaslorer.de';
 
 
 // bundler
-var bundler = watchify(browserify('./site/assets/js/Mdb.js', watchify.args));
+var bundler = watchify(browserify('./site/assets/js/Ajax.js', watchify.args));
 // add any other browserify options or transforms here
-// bundler.transform('brfs');
+// bundler.transform(brfs);
 
 gulp.task('bundle', bundle); // so you can run `gulp js` to build the file
 bundler.on('update', bundle); // on any dep update, runs the bundler
@@ -39,10 +40,33 @@ function bundle() {
       .pipe(buffer())
       .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
       .pipe(sourcemaps.write('./')) // writes .map file
+
     //
     .pipe(gulp.dest('./dist/assets/js/'));
 }
 
+// uncss
+var gulp = require('gulp');
+var uncss = require('gulp-uncss');
+
+gulp.task('uncss', function() {
+  return gulp.src('site/assets/**/*.css')
+    .pipe(concat('main.css'))
+    .pipe(uncss({
+        html: ['site/index.html'],
+        ignore: [
+          ".fade",
+          ".fade.in",
+          ".collapse",
+          ".collapse.in",
+          ".collapsing",
+          ".alert-danger",
+          /\.open/
+       ]
+    }))
+    .pipe($.csso())
+    .pipe(gulp.dest('./out'));
+});
 
 // css styles
 gulp.task('styles', function () {
@@ -73,7 +97,7 @@ gulp.task('jshint', function () {
 gulp.task('html', ['styles'], function () {
   var assets = $.useref.assets({searchPath: ['site/assets/css', 'site', '.']});
 
-  return gulp.src('dist/*.html')
+  return gulp.src('site/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
@@ -116,23 +140,16 @@ gulp.task('copy', function () {
 
 // Watch Files For Changes & Reload
 gulp.task('serve', function () {
-  browserSync.init({
-    server: {
-      baseDir: ['site'],
-      index: 'index.html',
-      routes: {
-        '/bower_components': 'bower_components'
-      }
-    },
-    notify: false
+  browserSync({
+    proxy: "multicolumn.local/site/"
   });
 
   // watch for changes
   gulp.watch([
-    'dist/*.html',
+    'site/*.html',
     'site/assets/css/**/*.css',
-    'assets/css/**/*.css',
-    'site/assets/js/**/*.js'
+    'site/assets/js/**/*.js',
+    'site/php/*.php'
   ]).on('change', reload);
 
   gulp.watch('site/assets/css/**/*.scss', ['styles']);
@@ -149,7 +166,7 @@ gulp.task('serve', function () {
     imageMagick: true
   }))
 
-  .pipe(gulp.dest('site/assets/.tmp'));
+  .pipe(gulp.dest('dist/assets/'));
 });
 
 // Optimize Images
@@ -159,7 +176,7 @@ gulp.task('images', function () {
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest('site/assets/'))
+    .pipe(gulp.dest('dist/assets/'))
     .pipe(reload({stream: true, once: true}))
     .pipe($.size({title: 'images'}));
 });
@@ -172,17 +189,11 @@ gulp.task('watch', function () {
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['dist']));
 
+gulp.task('cleanApp', del.bind(null, ['app']));
+
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
-  runSequence('js', ['images', 'html', 'js', 'styles', 'copy'], 'size', cb);
-});
-
-gulp.task('build', ['html', 'images', 'styles', 'js', 'copy'], function () {
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
-
-gulp.task('size', function(){
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+  runSequence('js', ['images', 'html', 'js', 'styles', 'copy'], 'cleanApp', cb);
 });
 
 gulp.task('mobile', function () {
