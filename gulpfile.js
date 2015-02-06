@@ -95,9 +95,9 @@ gulp.task('jshint', function () {
 
 // html
 gulp.task('html', ['styles'], function () {
-  var assets = $.useref.assets({searchPath: ['site/assets/css', 'site', '.']});
+  var assets = $.useref.assets({searchPath: ['site/assets/**/*/', '.']});
 
-  return gulp.src('site/*.html')
+  return gulp.src('site/index.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
@@ -129,7 +129,7 @@ gulp.task('copy', function () {
   return gulp.src([
     'site/**/*',
     '!site/assets/**/*.jpg',
-    '!site/assets/js/**/*.js',
+    '!site/assets/js/*.js',
     '!site/assets/css/*.scss',
     '!site/index.html'
     ],{
@@ -174,7 +174,8 @@ gulp.task('images', function () {
   return gulp.src('site/assets/**/*')
     .pipe($.cache($.imagemin({
       progressive: true,
-      interlaced: true
+      interlaced: true,
+      optimizationLevel: 5
     })))
     .pipe(gulp.dest('dist/assets/'))
     .pipe(reload({stream: true, once: true}))
@@ -193,7 +194,7 @@ gulp.task('cleanApp', del.bind(null, ['app']));
 
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
-  runSequence('js', ['images', 'html', 'js', 'styles', 'copy'], 'cleanApp', cb);
+  runSequence('images', ['html', 'js', 'styles', 'copy'], 'cleanApp', cb);
 });
 
 gulp.task('mobile', function () {
