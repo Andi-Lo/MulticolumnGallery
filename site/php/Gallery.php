@@ -25,6 +25,7 @@ if(! defined("NUM_OF_COLUMNS")) define("NUM_OF_COLUMNS", $config->number_of_colu
 if(! defined("THUMB_WIDTH")) define("THUMB_WIDTH", (int) $config->thumbnail_width);
 if(! defined("PAD_LEFT_HD")) define("PAD_LEFT_HD", (int) $config->margin_left_hd);
 if(! defined("PAD_LEFT_HDR")) define("PAD_LEFT_HDR", (int) $config->margin_left_hdr);
+if(! defined("PAD_RIGHT")) define("PAD_RIGHT", (int) $config->margin_right);
 if(! defined("PAD_TOP")) define("PAD_TOP", (int) $config->margin_top);
 if(! defined("PAD")) define("PAD", (int) $config->offset);
 if(! defined("PATH_THUMBNAILS")) define("PATH_THUMBNAILS", $config->thumb_path);
@@ -52,6 +53,9 @@ class Gallery{
     $galleryWidth = $request['galleryWidth'];
     $columnNames = array();
     $numOfCOlumns = -1;
+
+    // echo $galleryWidth . " \n";
+    // echo $requestWidth . "\n";
 
     if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
@@ -100,9 +104,17 @@ class Gallery{
     self::printJSON();
   }
 
+
   private function setNumOfColumns($galleryWidth) {
-    $galleryWidth = $galleryWidth - PAD;
-    $onePicture = PAD_LEFT_HD + THUMB_WIDTH + PAD;
+    global $config;
+
+    if($config->center == 'yes') {
+      $galleryWidth = (($galleryWidth - PAD) - PAD_LEFT_HD) - PAD_RIGHT;
+    } else {
+      $galleryWidth = ($galleryWidth - PAD) - PAD_RIGHT;
+    }
+
+    $onePicture = PAD_LEFT_HDR + THUMB_WIDTH + PAD;
     $nPictures = THUMB_WIDTH + PAD;
 
     if($galleryWidth >= $onePicture) {
