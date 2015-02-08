@@ -23,6 +23,7 @@ class Config{
   public $margin_left_hd = 0;
   public $margin_top = 0;
   public $margin_right = 0;
+  public $margin_bottom = 0;
   public $center = 'yes';
   public $resize = 'yes';
   public $fadeIn = 'yes';
@@ -51,6 +52,7 @@ class Config{
     $this->shuffle = $json['shuffle_pictures'];
     $this->sortAfterDate = $json['sort_pictures_after_date_taken'];
     $this->caching = $json['set_cache_on'];
+    $this->margin_bottom = $json['margin_bottom'];
   }
 }
 

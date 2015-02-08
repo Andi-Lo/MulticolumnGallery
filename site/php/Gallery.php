@@ -27,6 +27,7 @@ if(! defined("PAD_LEFT_HD")) define("PAD_LEFT_HD", (int) $config->margin_left_hd
 if(! defined("PAD_LEFT_HDR")) define("PAD_LEFT_HDR", (int) $config->margin_left_hdr);
 if(! defined("PAD_RIGHT")) define("PAD_RIGHT", (int) $config->margin_right);
 if(! defined("PAD_TOP")) define("PAD_TOP", (int) $config->margin_top);
+if(! defined("MARGIN_BOTTOM")) define("MARGIN_BOTTOM", (int) $config->margin_bottom);
 if(! defined("PAD")) define("PAD", (int) $config->offset);
 if(! defined("PATH_THUMBNAILS")) define("PATH_THUMBNAILS", $config->thumb_path);
 if(! defined("PATH_IMAGES")) define("PATH_IMAGES", $config->image_path);
@@ -97,13 +98,12 @@ class Gallery{
 
     for ($i=0; $i < $numOfColumns; $i++) {
       self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
-      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
+      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY + MARGIN_BOTTOM;
     }
 
     self::$_columnContainer['columnHeight'] = $columnHeight;
     self::printJSON();
   }
-
 
   private function setNumOfColumns($galleryWidth) {
     global $config;
@@ -195,7 +195,7 @@ class Gallery{
   }
 
   /**
-   * Creates a file with the given name
+   * Creates a file with the given name in folder ./php
    * @param  String $filename
    * @return boolean          true if file created else false
    */
