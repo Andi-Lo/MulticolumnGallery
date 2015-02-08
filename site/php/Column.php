@@ -165,16 +165,20 @@ class Column{
 
     /* for each column, calculate the size of the gallery to specify media queries */
     for ($column = 1; $column <= $numOfColumns; $column++) {
+
         /* its the max column (n) */
-      if($column == $numOfColumns){
-        $result = $padLeft + ($column * THUMB_WIDTH) + PAD + ($column * PAD);
-      } /* its the min column (1) */
-      elseif($column == 1){
-        $result = $padLeft + THUMB_WIDTH + PAD;
-      } /* its a column between (2) and (n-1) */
+      if($column != 1){
+        $result = $padLeft + ($column * THUMB_WIDTH) + (($column-1) * PAD);
+      } 
+        /* its the min column (1) */
       else{
+        $result = $padLeft + THUMB_WIDTH + PAD;
+      } 
+
+        /* its a column between (2) and (n-1) */
+/*      else{
         $result = $padLeft + ($column * THUMB_WIDTH) + PAD + ($column * PAD);
-      }
+      }*/
       $queries[] = $result;
     }
     return $queries;

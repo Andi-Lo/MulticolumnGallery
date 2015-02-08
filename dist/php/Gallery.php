@@ -25,6 +25,7 @@ if(! defined("NUM_OF_COLUMNS")) define("NUM_OF_COLUMNS", $config->number_of_colu
 if(! defined("THUMB_WIDTH")) define("THUMB_WIDTH", (int) $config->thumbnail_width);
 if(! defined("PAD_LEFT_HD")) define("PAD_LEFT_HD", (int) $config->margin_left_hd);
 if(! defined("PAD_LEFT_HDR")) define("PAD_LEFT_HDR", (int) $config->margin_left_hdr);
+if(! defined("PAD_RIGHT")) define("PAD_RIGHT", (int) $config->margin_right);
 if(! defined("PAD_TOP")) define("PAD_TOP", (int) $config->margin_top);
 if(! defined("PAD")) define("PAD", (int) $config->offset);
 if(! defined("PATH_THUMBNAILS")) define("PATH_THUMBNAILS", $config->thumb_path);
@@ -53,6 +54,9 @@ class Gallery{
     $columnNames = array();
     $numOfCOlumns = -1;
 
+    // echo $galleryWidth . " \n";
+    // echo $requestWidth . "\n";
+
     if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
       $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
@@ -79,7 +83,7 @@ class Gallery{
 
     $queries = $column->calcQueries();
 
-    $activeColumn = self::calcActiveColumn($galleryWidth, $queries);
+    $activeColumn = self::calcActiveColumn($galleryWidth, $requestWidth, $queries);
 
     self::$_columnContainer =
       array(
@@ -100,13 +104,26 @@ class Gallery{
     self::printJSON();
   }
 
+
   private function setNumOfColumns($galleryWidth) {
-    $galleryWidth = $galleryWidth - PAD;
-    $onePicture = PAD_LEFT_HD + THUMB_WIDTH + PAD;
+    global $config;
+
+    if($config->center == 'yes') {
+      $galleryWidth = (($galleryWidth - PAD) - PAD_LEFT_HD) - PAD_RIGHT;
+      // echo $galleryWidth . "\n";
+    } else {
+      $galleryWidth = ($galleryWidth - PAD_LEFT_HDR) - PAD_RIGHT;
+      // echo $galleryWidth . "\n";
+    }
+
+    $onePicture = PAD_LEFT_HDR + THUMB_WIDTH + PAD;
     $nPictures = THUMB_WIDTH + PAD;
+    // echo $nPictures . "\n";
+
 
     if($galleryWidth >= $onePicture) {
       $tmp = $galleryWidth / $nPictures;
+      // echo $tmp . "\n";
       $numOfColumns = intval($tmp);
       self::$_numOfColumns = $numOfColumns;
     } 
@@ -142,30 +159,36 @@ class Gallery{
    * 
    * Example: if the config has "number_of_columns" set to 5 but the screen of the user
    * is not big enough to display 5, it will calculate the appropriate number
-   * @param  int $requestWidth clients screen width
+   * @param  int $galleryWidth clients screen width
    * @param  array $queries    the calculated queries for every column
    * @return int               an integer ranging from 1 to "number_of_columns" defined in config
    */
-  public function calcActiveColumn($requestWidth, $queries)
+  public function calcActiveColumn($galleryWidth, $requestWidth, $queries)
   {
     // init variables
     $tmpDiff = 0;
     $key = -1;
+
+    if($requestWidth < $galleryWidth) {
+      $galleryWidth = $requestWidth;
+    }
 
     // for every media query in the array
     foreach ($queries as $query => $value) {
 
       // when clients screen is smaller then the smallest query (e.g. 320px)
       // return that the active column is 1
-      if ($requestWidth < $queries[0]){
+      if ($galleryWidth < $queries[0]){
         return 1;
       }
 
       // find the smallest difference
-      $diff = $requestWidth - $value;
+      $diff = $galleryWidth - $value;
+      // echo "diff: " . $diff . " \n" . "tmpdiff: " . $tmpDiff;
       if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
         $key = $query;
+
       }
     }
     return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4

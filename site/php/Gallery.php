@@ -83,7 +83,7 @@ class Gallery{
 
     $queries = $column->calcQueries();
 
-    $activeColumn = self::calcActiveColumn($galleryWidth, $queries);
+    $activeColumn = self::calcActiveColumn($galleryWidth, $requestWidth, $queries);
 
     self::$_columnContainer =
       array(
@@ -110,15 +110,20 @@ class Gallery{
 
     if($config->center == 'yes') {
       $galleryWidth = (($galleryWidth - PAD) - PAD_LEFT_HD) - PAD_RIGHT;
+      // echo $galleryWidth . "\n";
     } else {
-      $galleryWidth = ($galleryWidth - PAD) - PAD_RIGHT;
+      $galleryWidth = ($galleryWidth - PAD_LEFT_HDR) - PAD_RIGHT;
+      // echo $galleryWidth . "\n";
     }
 
     $onePicture = PAD_LEFT_HDR + THUMB_WIDTH + PAD;
     $nPictures = THUMB_WIDTH + PAD;
+    // echo $nPictures . "\n";
+
 
     if($galleryWidth >= $onePicture) {
       $tmp = $galleryWidth / $nPictures;
+      // echo $tmp . "\n";
       $numOfColumns = intval($tmp);
       self::$_numOfColumns = $numOfColumns;
     } 
@@ -154,30 +159,36 @@ class Gallery{
    * 
    * Example: if the config has "number_of_columns" set to 5 but the screen of the user
    * is not big enough to display 5, it will calculate the appropriate number
-   * @param  int $requestWidth clients screen width
+   * @param  int $galleryWidth clients screen width
    * @param  array $queries    the calculated queries for every column
    * @return int               an integer ranging from 1 to "number_of_columns" defined in config
    */
-  public function calcActiveColumn($requestWidth, $queries)
+  public function calcActiveColumn($galleryWidth, $requestWidth, $queries)
   {
     // init variables
     $tmpDiff = 0;
     $key = -1;
+
+    if($requestWidth < $galleryWidth) {
+      $galleryWidth = $requestWidth;
+    }
 
     // for every media query in the array
     foreach ($queries as $query => $value) {
 
       // when clients screen is smaller then the smallest query (e.g. 320px)
       // return that the active column is 1
-      if ($requestWidth < $queries[0]){
+      if ($galleryWidth < $queries[0]){
         return 1;
       }
 
       // find the smallest difference
-      $diff = $requestWidth - $value;
+      $diff = $galleryWidth - $value;
+      // echo "diff: " . $diff . " \n" . "tmpdiff: " . $tmpDiff;
       if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
         $key = $query;
+
       }
     }
     return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
