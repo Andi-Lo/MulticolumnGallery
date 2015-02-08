@@ -132,7 +132,7 @@ class Gallery{
     }
   }
 
-  public function getNumOfColumns() {
+  public static function getNumOfColumns() {
     return self::$_numOfColumns;
   }
 
