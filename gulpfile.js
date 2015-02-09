@@ -95,25 +95,25 @@ gulp.task('jshint', function () {
 
 // html
 gulp.task('html', ['styles'], function () {
-  var assets = $.useref.assets({searchPath: ['site/assets/**/*/', '.']});
+  // var assets = $.useref.assets({searchPath: ['site/assets/**/*/', '.']});
 
   return gulp.src('site/index.html')
-    .pipe(assets)
+/*    .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
     .pipe(assets.restore())
-    .pipe($.useref())
+    .pipe($.useref())*/
     .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
     .pipe(gulp.dest('dist'));
 });
 
 // minify javascript
 gulp.task('js', function () {
-    gulp.src('site/assets/js/**/*.js')
+    gulp.src('site/assets/js/*.js')
       .pipe(concat('all.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('dist/assets/js/'))
-        .pipe(notify({ message: 'Finished minifying JavaScript'}));
+      .pipe(uglify())
+      .pipe(gulp.dest('dist/assets/js/'))
+      .pipe(notify({ message: 'Finished minifying JavaScript'}));
 });
 
 gulp.task('fonts', function () {
@@ -171,7 +171,7 @@ gulp.task('serve', function () {
 
 // Optimize Images
 gulp.task('images', function () {
-  return gulp.src('site/assets/**/*')
+  return gulp.src('site/assets/**/*.+(jpg|png)')
     .pipe($.cache($.imagemin({
       progressive: true,
       interlaced: true,
