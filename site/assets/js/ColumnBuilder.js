@@ -12,8 +12,12 @@
 
 var tmpColumn = -1;
 
-// form html columns out of the data gotten from the ajax call
-function buildColumn(columnName) {
+/**
+ * Build html columns out of the data gotten from the ajax call
+ * @param  {String} columnName    the columns name
+ * @param  {object} requestResult an object containing the requests data 
+ */
+function buildColumn(columnName, requestResult) {
   html = "";
   tmp = columnName.split('_');
   columnNumber = parseInt(tmp[0], 10) - 1;

@@ -55,9 +55,6 @@ class Gallery{
     $columnNames = array();
     $numOfCOlumns = -1;
 
-    // echo $galleryWidth . " \n";
-    // echo $requestWidth . "\n";
-
     if($config->caching == "yes" && $config->shuffle != 'yes') {
       $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
       $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
