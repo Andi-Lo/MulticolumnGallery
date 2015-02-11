@@ -70,13 +70,14 @@ Show your best pictures to the world with a very minimalistic approach. No pictu
 <a id="gallery-example" class="anchor" href="#gallery-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 <a name="Gallery%20Example"></a>Gallery Example</h2>
 
-<p><a href="http://andreaslorer.de/">Gallery Demo</a></p>
+<p><a href="http://andreaslorer.de/">Demo</a></p>
+<p><a href="http://www.emkwangen.de/bilder.php">Another Demo</a></p>
 
 <h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 <a name="Requirements"></a>Requirements</h2>
 
-<p>Webserver with php or if you want to run it on localhost you need a server (like Xampp).</p>
+<p>Webserver with php or if you want to run it on localhost you need a server (like Xampp). Optional: If you are familiar with <strong>npm</strong> and <strong>gulp</strong> you can take a look at the gulpfile and set up a webserver that way (however you need to proxy through a server that can interprete PHP)</p>
 
 <h2>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>
@@ -84,12 +85,12 @@ Show your best pictures to the world with a very minimalistic approach. No pictu
 
 <p>Clone or download and unzip the repository. Browse the "dist/"-folder and copy those file into your project or website.  
 Get the following lines into your HTML document.<br> 
-Make sure that the includes are the right order and placed just befor the closing <code>&lt;/body&gt;</code> tag! (JQuery has to be loaded befor the javascript files if you already have jquery on your site dont include it twice) </p>
+Make sure that the includes are the right order and placed just befor the closing <code>&lt;/body&gt;</code> tag! (JQuery has to be loaded befor the javascript files if you already have jquery on your site do not include it twice) </p>
 
 <div class="highlight highlight-html"><pre><span class="pl-c">&lt;!-- JQuery library --&gt;</span>
 &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
 <span class="pl-c">&lt;!-- Gallery core JS file --&gt;</span>
-&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>yourPath/multiColumn.min.js<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/js/all.min.js<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
 <p>If you want a Lightbox (see <a href="http://dimsemenov.com/plugins/magnific-popup/">http://dimsemenov.com/plugins/magnific-popup/</a> for more infos or help) for your images enabled, include the following files into your HTML document: (make sure to have JQuery included befor the script tag)</p>
 
@@ -101,35 +102,36 @@ Make sure that the includes are the right order and placed just befor the closin
 <span class="pl-c">&lt;!-- make sure to have JQuery included befor this script tag --&gt;</span>
 <span class="pl-c">&lt;!-- Magnific Popup core JS file --&gt;</span>
 &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific-popup.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt; 
+<span class="pl-s2">
+<span class="pl-c">&lt;!-- Take a look into that file and change the credentials accordingly --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+
 &lt;/<span class="pl-ent">body</span>&gt;
 &lt;/<span class="pl-ent">html</span>&gt;</pre></div>
 
 <p>Add the following div-box into your HTML document</p>
-
 <div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>gallery<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>popup-gallery<span class="pl-pds">"</span></span>&gt;
-
-<span class="pl-s2">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>assets/magnific-popup/magnific.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
 
 &lt;/<span class="pl-ent">div</span>&gt;<span class="pl-c">&lt;!-- ./popup-gallery --&gt;</span>
 </pre></div>
 
 <p>Customize your gallery through the config file placed in /config/config.json<br>
-See Section: Documentation for more Information on how to use the config file.<br>
+See Section: <a href="#Documentation">Documentation</a> for more Information on how to use the config file.<br>
 Add Images and Thumbnail into the appropriate folders: </p>
 
 <ul>
-<li>Image files dimensions should be 1600*1200 max to increase performance.</li>
+<li>Image files dimensions should be 1600*1200 (better smaller) to increase performance.</li>
 <li>Supported image formats are png, jpg.</li>
-<li>Thumbnails can be named yourPrefix_imagename, imagename_yourPostfix or a combination of both.</li>
-<li>If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed</li>
-<li>If you place them in an seperat folder they do not need a pre or postfix at all.</li>
+<li>Thumbnails can be named like this: yourPrefix_imagename, imagename_yourPostfix or a combination of both (e.g. prefix_img_postfix.jpg)</li>
+<li>If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed else its not working</li>
+<li>If you place images and thumbnails in an seperat folder they do not need a pre or postfix.</li>
 </ul>
 
 <h2>
 <a id="resizing-images" class="anchor" href="#resizing-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 <a name="resize"></a>Resizing Images</h2>
 
-<p>When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by <a href="http://www.imagemagick.org/index.php">ImageMagick</a>. Normally Unix comes with ImageMagick already installed you can check this by typing <code>$ identify -version</code>.</p>
+<p>When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by <a href="http://www.imagemagick.org/index.php">ImageMagick</a>. Normally Unix comes with ImageMagick already installed you can check this by typing <code>$ identify -version</code>. If you are familiar with <strong>gulp</strong> and <strong>npm</strong> you can use the gulp command "gulp resize" to resize images.</p>
 
 <p>Make a backup of your images befor you run this command!
 If your pictures are in another file format, change *.jpg to the format you like e.g. *.png</p>
@@ -186,6 +188,8 @@ If your pictures are in another file format, change *.jpg to the format you like
                                                         // However if you optimized them for the web, your programm
                                                         // might have removed the metadata header and removed those
                                                         // information.
+
+  "set_cache_on": "no"                                  // experimental, you should not turn this on yet.
 }
 
 </code></pre>
