@@ -24,11 +24,12 @@ Show your best pictures to the world with a very minimalistic approach. No pictu
 * Position your gallery via a simple config file
 
 ## <a name="Gallery Example"></a>Gallery Example
-[Gallery Demo](http://andreaslorer.de/)
+[Gallery Demo](http://andreaslorer.de/)  
+[Another Demo](http://www.emkwangen.de/bilder.php)  
 
 ## <a name="Requirements"></a>Requirements
 
-Webserver with php or if you want to run it on localhost you need a server (like Xampp).
+Webserver with php or if you want to run it on localhost you need a server (like Xampp). Optional: If you are familiar with **npm** and **gulp** you can take a look at the gulpfile and set up a webserver that way (however you need to proxy through a server that can interprete PHP)
 
 ## <a name="Setup"></a>Setup
 Clone or download and unzip the repository. Browse the "dist/"-folder and copy those file into your project or website.  
@@ -37,8 +38,8 @@ Make sure that the includes are the right order and placed just befor the closin
 ```html
 <!-- JQuery library -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<!-- Gallery core JS file -->
-<script src="yourPath/multiColumn.min.js" type="text/javascript"></script>
+<!-- Gallery core JS file, feel free to rename it -->
+<script src="assets/js/all.min.js" type="text/javascript"></script>
 ```
 
 If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for more infos or help) for your images enabled, include the following files into your HTML document: (make sure to have JQuery included befor the script tag)
@@ -51,6 +52,9 @@ If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for mo
 <!-- make sure to have JQuery included befor this script tag -->
 <!-- Magnific Popup core JS file -->
 <script src="assets/magnific-popup/magnific-popup.js"></script> 
+
+<!-- Take a look into that file and change the credentials accordingly  -->
+<script src="assets/magnific-popup/magnific.js"></script>
 </body>
 </html>
 ```
@@ -58,23 +62,20 @@ If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for mo
 Add the following div-box into your HTML document
 ```html
 <div id="gallery" class="popup-gallery">
-
-    <script src="assets/magnific-popup/magnific.js"></script>
-    
 </div><!-- ./popup-gallery -->
 
 ```
 Customize your gallery through the config file placed in /config/config.json  
 See Section: Documentation for more Information on how to use the config file.  
 Add Images and Thumbnail into the appropriate folders: 
-* Image files dimensions should be 1600*1200 max to increase performance.
+* Image files dimensions should be 1600*1200 (better smaller) to increase performance.
 * Supported image formats are png, jpg.
-* Thumbnails can be named yourPrefix_imagename, imagename_yourPostfix or a combination of both.
-* If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed
-* If you place them in an seperat folder they do not need a pre or postfix at all.
+* Thumbnails can be named like this: yourPrefix_imagename, imagename_yourPostfix or a combination of both (e.g. prefix_img_postfix.jpg)
+* If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed else its not working
+* If you place images and thumbnails in an seperat folder they do not need a pre or postfix.
 
 ## <a name="resize"></a>Resizing Images
-When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by [ImageMagick](http://www.imagemagick.org/index.php). Normally Unix comes with ImageMagick already installed you can check this by typing `$ identify -version`.
+When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by [ImageMagick](http://www.imagemagick.org/index.php). Normally Unix comes with ImageMagick already installed you can check this by typing `$ identify -version`. If you are familiar with **gulp** and **npm** you can use the gulp command "gulp resize" to resize images.
 
 Make a backup of your images befor you run this command!
 If your pictures are in another file format, change *.jpg to the format you like e.g. *.png
@@ -128,6 +129,8 @@ A short documentation for the config.json file:
                                                         // However if you optimized them for the web, your programm
                                                         // might have removed the metadata header and removed those
                                                         // information.
+
+  "set_cache_on": "no"                                  // experimental, you should not turn this on yet.
 }
 
 ```
