@@ -19,16 +19,13 @@ $(function(){
     // config file resize is set to yes
     if(resize == 'yes'){
       // handle the first column
-      console.log(winWidth + ">= ? "+ queries[queries.length-1]);
       if(winWidth <= queries[0]){
-        console.log('first col');
         buildColumn(names[0]);
         refreshScreen();
         return;
       } // handle the last column
       else if(winWidth >= queries[queries.length-1]){
         buildColumn(names[columns-1]);
-        console.log('last col');
         refreshScreen();
         return;
       } // handle all other columns

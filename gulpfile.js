@@ -153,7 +153,8 @@ gulp.task('serve', function () {
   ]).on('change', reload);
 
   gulp.watch('site/assets/css/**/*.scss', ['styles']);
-  gulp.watch(['site/assets/images/**/*'], ['images']);
+  gulp.watch(['site/assets/images/**/*.jpg'], ['images']);
+  gulp.watch(['site/assets/js/**/*.js'], ['jslint']);
 });
 
 // resize images

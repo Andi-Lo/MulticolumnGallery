@@ -16,14 +16,14 @@ window.addEventListener('DOMContentLoaded', function(){
 }, false);
 
 var REQUEST_PENDING = 2;
-var REQUEST_SUCCESS = 4
+var REQUEST_SUCCESS = 4;
+var requestResult;
 
 /**
  * Gallery Factory for creating gallery Objects
  * @method requestGallery()
  */
 var GalleryFactory = function () {
-  this.requestResult = "";
   this.hasColumns = -1;
   this.columns = 0;
   this.names = "";
@@ -48,15 +48,15 @@ var GalleryFactory = function () {
   var urlEncode = function (object) {
     var encodedString = '';
     for (var prop in object) {
-        if (object.hasOwnProperty(prop)) {
-            if (encodedString.length > 0) {
-                encodedString += '&';
-            }
-            encodedString += encodeURI(prop + '=' + object[prop]);
+      if (object.hasOwnProperty(prop)) {
+        if (encodedString.length > 0) {
+            encodedString += '&';
         }
+        encodedString += encodeURI(prop + '=' + object[prop]);
+      }
     }
     return encodedString;
-  }
+  };
 
 
   /**
@@ -77,7 +77,7 @@ var GalleryFactory = function () {
         case REQUEST_SUCCESS:
           document.getElementsByClassName('ajax-loading')[0].style.display = 'none';
       }
-    }
+    };
 
     // handles the ajax onload event
     request.onload = function() {
@@ -86,6 +86,7 @@ var GalleryFactory = function () {
 
         /* Success! */
         var data = JSON.parse(request.responseText);
+        requestResult = data;
         columns = data.numOfColumns;
         queries = data.mediaQueries;
         names = data.columnNames;
@@ -123,47 +124,6 @@ var GalleryFactory = function () {
     /* send ajax request to server */
     request.send(urlEncode(this.sData));
     return true;
-  }
+  };
   
-}
-
-/* ajax call for Gallery images*/
-// $.ajax({
-//     url: "php/Gallery.php",
-//     type: 'post',
-//     data: { width: $(window).width(), galleryWidth: $('.popup-gallery').innerWidth(),},
-//     cache: false,
-//     beforeSend: function(){
-//       $( ".ajax-loading" ).css('display', 'block');
-//     },
-//     success: function(json) {
-//       var winWidth = $(window).width();
-//       var winHeight = $(window).height();
-//       requestResult = json;
-//       columns = requestResult.numOfColumns;
-//       queries = requestResult.mediaQueries;
-//       names = requestResult.columnNames;
-//       resize = requestResult.resize;
-//       fadeIn = requestResult.fadeIn;
-//       columnHeight = requestResult.columnHeight;
-//       activeColumn = requestResult.activeColumn +"_Columns";
-//       for (var i = 0; i < columns; i++) {
-//         if(i === 0){
-//           buildColumn(names[i]);
-//           $( ".ajax-loading" ).css('display', 'none');
-//           refreshScreen();
-//         }else{
-//           if(winWidth >= queries[i]){
-//             buildColumn(activeColumn);
-//             $( ".ajax-loading" ).css('display', 'none');
-//             refreshScreen();
-//           }
-//         }
-//       }
-//     },
-//     error: function(err) {
-//       console.log("Ajax Error: "+ err);
-//     }
-//   }); // end ajax call
-  
-
+};

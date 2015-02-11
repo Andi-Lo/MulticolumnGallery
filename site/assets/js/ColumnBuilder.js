@@ -15,19 +15,23 @@ var tmpColumn = -1;
 /**
  * Build html columns out of the data gotten from the ajax call
  * @param  {String} columnName    the columns name
- * @param  {object} requestResult an object containing the requests data 
+ * @param  {object} requestResult an object containing the requests data
+ * @todo remove jquery
  */
-function buildColumn(columnName, requestResult) {
+function buildColumn(columnName) {
   html = "";
   tmp = columnName.split('_');
   columnNumber = parseInt(tmp[0], 10) - 1;
   if (tmpColumn != columnNumber) {
     tmpColumn = columnNumber;
 
+    // var winHeight = window.innerHeight() + window.pageYOffset;
+
     var winHeight = $(window).innerHeight() + $(window).scrollTop();
     $('#gallery').css("height", columnHeight[columnNumber]);
     $('.images').remove();
-    jQuery.each(requestResult[columnName], function(i, image) {
+
+    requestResult[columnName].forEach(function(image, i){
       if (typeof image == 'object' && image !== null) {
         
         /* image position is in the users screensize -> image is visible */
@@ -48,7 +52,7 @@ var imgId = 0;
 
 function addImgToColumn(columnName, scrollPos) {
   html = "";
-  jQuery.each(requestResult[columnName], function(i, image) {
+  requestResult[columnName].forEach(function(image, i){
     if (typeof image == 'object' && image !== null) {
       if (image.id > imgId && (image.id - imgId) <= 1) {
         // image gets loaded but is hidden till user scrolls there
@@ -66,6 +70,6 @@ function addImgToColumn(columnName, scrollPos) {
       return;
   });
 
-  $('#gallery').append(html);
+  document.getElementById('gallery').appendChild(html);
   return;
 } // end addImgToColumn
