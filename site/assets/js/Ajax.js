@@ -9,15 +9,31 @@
  * http://bithugger.github.io/MulticolumnGallery/
  * bla
  */
+
+var REQUEST_PENDING = 2;
+var REQUEST_SUCCESS = 4;
+var requestResult;
+var galleryController;
+
 window.addEventListener('DOMContentLoaded', function(){
   var gal = new GalleryFactory();
   gal.requestGallery();
 
 }, false);
 
-var REQUEST_PENDING = 2;
-var REQUEST_SUCCESS = 4;
-var requestResult;
+function addControllers(){
+  var scrlCtrl = new ScrollController();
+  var resizeCtrl = new ResizeController();
+  galleryController = {
+                     'scrlCtrl': scrlCtrl,
+                     'resizeCtrl': resizeCtrl
+                    };
+
+  window.addEventListener('scroll', scrlCtrl.handleScroll, true);
+  window.addEventListener('resize', scrlCtrl.updateWidth, false);
+  window.addEventListener('resize', resizeCtrl.handleResize, false);
+  return galleryController;
+}
 
 /**
  * Gallery Factory for creating gallery Objects
@@ -94,19 +110,20 @@ var GalleryFactory = function () {
         fadeIn = data.fadeIn;
         columnHeight = data.columnHeight;
         activeColumn = data.activeColumn +"_Columns";
+
+        var controller = addControllers();
         
         for (var i = 0; i < columns; i++) {
           if(i === 0){
-            buildColumn(names[i], data);
-            refreshScreen();
+            buildColumn(names[i]);
+            controller.scrlCtrl.refreshScreen();
           }else{
-            if(winWidth >= queries[i]){
-              buildColumn(activeColumn, data);
-              refreshScreen();
+            if(window.innerWidth >= queries[i]){
+              buildColumn(activeColumn);
+              controller.scrlCtrl.refreshScreen();
             }
           }
         }
-
         return true;
       } else {
         /* We reached our target server, but it returned an error */

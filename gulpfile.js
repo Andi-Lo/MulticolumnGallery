@@ -85,7 +85,7 @@ gulp.task('styles', function () {
 
 // Lint JavaScript
 gulp.task('jshint', function () {
-  return gulp.src('site/assets/js/scripts.js')
+  return gulp.src('site/assets/js/**/*.js')
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.jshint.reporter('fail'))
@@ -154,7 +154,7 @@ gulp.task('serve', function () {
 
   gulp.watch('site/assets/css/**/*.scss', ['styles']);
   gulp.watch(['site/assets/images/**/*.jpg'], ['images']);
-  gulp.watch(['site/assets/js/**/*.js'], ['jslint']);
+  // gulp.watch(['site/assets/js/**/*.js'], ['jshint']);
 });
 
 // resize images

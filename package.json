@@ -13,7 +13,7 @@
     "gulp-gm": "0.0.7",
     "gulp-if": "^1.2.1",
     "gulp-imagemin": "^2.1.0",
-    "gulp-jshint": "^1.9.0",
+    "gulp-jshint": "^1.9.2",
     "gulp-load-plugins": "^0.8.0",
     "gulp-minify-html": "^0.1.6",
     "gulp-notify": "^2.1.0",
