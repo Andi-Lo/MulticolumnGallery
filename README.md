@@ -112,6 +112,8 @@ A short documentation for the config.json file:
 
   "margin_right": "0",                                  // Margin to right border of the screen
 
+  "margin_bottom": "0",                                 // Add a margin to the bottom of your page
+
   "center_column": "yes",                               // Yes / No, centeres the gallery if you have 5 columns
 
   "resize_columns": "yes",                              // Yes / No, disables responsive behavior
