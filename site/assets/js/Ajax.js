@@ -16,7 +16,7 @@ var requestResult;
 var galleryController;
 
 window.addEventListener('DOMContentLoaded', function(){
-  var gal = new GalleryFactory();
+  var gal = new GalleryFactory(getColumnBuilder());
   gal.requestGallery();
 
 }, false);
@@ -35,11 +35,13 @@ function addControllers(){
   return galleryController;
 }
 
+
 /**
  * Gallery Factory for creating gallery Objects
  * @method requestGallery()
  */
-var GalleryFactory = function () {
+var GalleryFactory = function (colBuilder) {
+  this.colBuilder = colBuilder;
   this.hasColumns = -1;
   this.columns = 0;
   this.names = "";
@@ -115,11 +117,11 @@ var GalleryFactory = function () {
         
         for (var i = 0; i < columns; i++) {
           if(i === 0){
-            buildColumn(names[i]);
+            colBuilder.buildColumn(names[i]);
             controller.scrlCtrl.refreshScreen();
           }else{
             if(window.innerWidth >= queries[i]){
-              buildColumn(activeColumn);
+              colBuilder.buildColumn(activeColumn);
               controller.scrlCtrl.refreshScreen();
             }
           }

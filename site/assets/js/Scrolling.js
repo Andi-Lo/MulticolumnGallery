@@ -26,6 +26,20 @@ var ScrollController = function() {
   this.timeoutId = 0;
   this.names = requestResult.columnNames;
 
+  this.fadeIn = function (el) {
+    el[0].style.opacity = 0;
+
+    var last = +new Date();
+    var tick = function() {
+      el[0].style.opacity = +el[0].style.opacity + (new Date() - last) / 400;
+      last = +new Date();
+
+      if (+el[0].style.opacity < 1) {
+        (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
+      }
+    };
+    tick();
+  }
 
   /**
    * [Description]
@@ -37,21 +51,25 @@ var ScrollController = function() {
     var fadeIn = requestResult.fadeIn,
         scrlPos = scrlCtrl.innerWinHeight + window.pageYOffset;
 
-    $('.image-inner').each(function(){
-      var cssTopValue = parseInt($(this).css('top'), 10);
-      var isVisible = $(this).css('visibility');
+    var images = document.getElementsByClassName('image-inner');
+
+    for (var i = images.length - 1; i >= 0; i--) {
+      var style = window.getComputedStyle(images[i]);
+      var cssTopValue = parseInt(style.getPropertyValue('top'), 10);
+      var isHidden = images[i].style.visibility;
 
       /* to see a Visual effect of unhiding a picture I use an offset of -100 */
       /* != 'NaN' because css.('top') returns the 'top' value and 'auto', parsing 'auto' will return a value or 'NaN' */
-      if(scrlPos - offset >= cssTopValue && cssTopValue != 'NaN' && isVisible == 'hidden'){
+      if(scrlPos - offset >= cssTopValue && cssTopValue != 'NaN' && isHidden == 'hidden'){
+        images[i].style.visibility = 'visible';
         if(fadeIn == 'yes'){
-          $(this).css({opacity: 0.0, visibility: "visible"}).animate({opacity: 1.0});
-        } else{
-          $(this).css("visibility", "visible");
-        }
+          if(images[i].style.opacity == 0) {
+            scrlCtrl.fadeIn([images[i]]);
+          }
+        } 
         scrollPosSave = scrlPos;
       }
-    });
+    }
   };
 
   /**
@@ -59,18 +77,21 @@ var ScrollController = function() {
    * @return {[type]} [description]
    */
   this.refreshScreen = function (scrlCtrl) {
-    // console.log('refreshScreen');
-    var scrlPos = this.innerWinHeight + $(window).scrollTop();
-    $('.image-inner').each(function(){
-      var cssTopValue = parseInt($(this).css('top'), 10);
-      /* to see a Visual effect of unhiding a picture I use an offset of -100 */
+
+    var scrlPos = this.innerWinHeight + window.pageYOffset;
+    var images = document.getElementsByClassName('image-inner');
+
+    for (var i = images.length - 1; i >= 0; i--) {
+      var style = window.getComputedStyle(images[i]);
+      var cssTopValue = parseInt(style.getPropertyValue('top'), 10);
+      /* to see a Visual effect of unhiding a picture I use an offset of -100px */
       /* != 'NaN' because css.('top') returns the 'top' value and 'auto', parsing 'auto' will return a value or 'NaN' */
       if(scrlPos >= cssTopValue && cssTopValue != 'NaN')
       {
-        $(this).css("visibility", "visible");
+        images[i].style.visibility = 'visible';
         scrollPosSave = scrlPos;
       }
-    });
+    };
   };
   // window.addEventListener('resize', updateWidth, true);
   // window.addEventListener('scroll', refreshScreen, true);
@@ -79,7 +100,7 @@ var ScrollController = function() {
 
 ScrollController.prototype.updateWidth = function(){
   var scrlCtrl = galleryController.scrlCtrl;
-  scrlCtrl.winWidth = $(window).innerWidth();
+  scrlCtrl.winWidth = window.innerWidth;
 };
 
 
@@ -108,7 +129,7 @@ ScrollController.prototype.handleScroll = function(){
 
     /* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
     scrlCtrl.timeoutId = setTimeout(function(){
-      addImgToColumn(scrlCtrl.names[tmpColumn], newScrollPos);
+      getColumnBuilder().addImgToColumn(scrlCtrl.names[tmpColumn], newScrollPos);
       scrlCtrl.refreshScreenOnScroll(30);
 
     }, 50);
