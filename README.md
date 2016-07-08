@@ -46,7 +46,7 @@ If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for mo
 ```html
 <head>
 <!-- Magnific Popup core CSS file -->
-<link rel="stylesheet" href="assets/magnific-popup/magnific-popup.css"> 
+<link rel="stylesheet" href="assets/magnific-popup/magnific-popup.min.css"> 
 </head>
 
 <!-- make sure to have JQuery included befor this script tag -->
@@ -131,8 +131,6 @@ A short documentation for the config.json file:
                                                         // However if you optimized them for the web, your programm
                                                         // might have removed the metadata header and removed those
                                                         // information.
-
-  "set_cache_on": "no"                                  // experimental, you should not turn this on yet.
 }
 
 ```
