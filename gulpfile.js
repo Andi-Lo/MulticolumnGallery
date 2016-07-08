@@ -1,4 +1,5 @@
 // generated on 2015-01-26 using generator-4dev 0.1.0
+// last update: 23.02.2015
 
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
@@ -11,17 +12,33 @@ var pagespeed = require('psi');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
-var gm = require('gulp-gm');
+var imageResize = require('gulp-image-resize');
 var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 var browserify = require('browserify');
-var uncss = require('gulp-uncss');
-
+var gulpBrowserify = require('gulp-browserify');
+var gulpif = require('gulp-if');
+var webp = require('gulp-webp');
+var rename = require('gulp-rename');
+var useref = require('gulp-useref');
+var jpegtran = require('imagemin-jpegtran');
 var site = 'http://www.andreaslorer.de';
 
+module.exports = gulp;
+
+// browserify task: builds a bundle out of your scripts
+gulp.task('buildBundle', function() {
+  // Single entry point to browserify
+  return gulp.src('./site/assets/js/Ajax.js')
+    .pipe(gulpBrowserify({
+      insertGlobals : false
+    }))
+    .pipe(rename('bundle.js'))
+    .pipe(gulp.dest('./dist/assets/js/'));
+});
 
 // bundler
 var bundler = watchify(browserify('./site/assets/js/Ajax.js', watchify.args));
@@ -40,182 +57,105 @@ function bundle() {
       .pipe(buffer())
       .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
       .pipe(sourcemaps.write('./')) // writes .map file
-
-    //
-    .pipe(gulp.dest('./dist/assets/js/'));
+    .pipe(gulp.dest('./dist/assets/js/'))
+    .pipe(gulp.dest('./site/assets/js/'));
 }
-
-// uncss
-var gulp = require('gulp');
-var uncss = require('gulp-uncss');
-
-gulp.task('uncss', function() {
-  return gulp.src('site/assets/**/*.css')
-    .pipe(concat('main.css'))
-    .pipe(uncss({
-        html: ['site/index.html'],
-        ignore: [
-          ".fade",
-          ".fade.in",
-          ".collapse",
-          ".collapse.in",
-          ".collapsing",
-          ".alert-danger",
-          /\.open/
-       ]
-    }))
-    .pipe($.csso())
-    .pipe(gulp.dest('./out'));
-});
-
-// css styles
-gulp.task('styles', function () {
-  return gulp.src('site/assets/css/*.scss')
-    .pipe($.sass({
-      outputStyle: 'nested', // libsass doesn't support expanded yet
-      precision: 10,
-      includePaths: ['.'],
-      onError: console.error.bind(console, 'Sass error:')
-    }))
-    .pipe($.postcss([
-      require('autoprefixer-core')({browsers: ['last 1 version']})
-    ]))
-    .pipe(gulp.dest('dist/assets/css/'));
-});
 
 // Lint JavaScript
 gulp.task('jshint', function () {
-  return gulp.src('site/assets/js/**/*.js')
+  return gulp.src('site/assets/js/*.js')
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.jshint.reporter('fail'))
     .pipe(reload({stream: true}));
 });
 
+// javascript
+gulp.task('js', ['buildBundle'], function () {
+  return gulp.src(['site/assets/js/*.js', 'dist/assets/js/bundle.js'])
+    .pipe(concat('bundle.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/assets/js/'));
+});
 
-// html
-gulp.task('html', ['styles'], function () {
-  // var assets = $.useref.assets({searchPath: ['site/assets/**/*/', '.']});
-
-  return gulp.src('site/index.html')
-/*    .pipe(assets)
-    .pipe($.if('*.js', $.uglify()))
-    .pipe($.if('*.css', $.csso()))
-    .pipe(assets.restore())
-    .pipe($.useref())*/
-    .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
+// assets task: minify html document with all its assets
+gulp.task('assets', function () {
+  var assets = useref.assets();
+  return gulp.src('site/*.html')
+    .pipe(gulpif('*.js', uglify()))
     .pipe(gulp.dest('dist'));
 });
 
-// minify javascript
-gulp.task('js', function () {
-    gulp.src('site/assets/js/*.js')
-      .pipe(concat('all.min.js'))
-      .pipe(uglify())
-      .pipe(gulp.dest('dist/assets/js/'))
-      .pipe(notify({ message: 'Finished minifying JavaScript'}));
-});
 
-gulp.task('fonts', function () {
-  return gulp.src(require('main-bower-files')().concat('site/assets/fonts/**/*'))
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
-    .pipe($.flatten())
-    .pipe(gulp.dest('.tmp/fonts'))
-    .pipe(gulp.dest('dist/fonts'));
-});
-
-// copy all files from /site/
 gulp.task('copy', function () {
   return gulp.src([
     'site/**/*',
-    '!site/assets/**/*.jpg',
-    '!site/assets/js/*.js',
-    '!site/assets/css/*.scss',
-    '!site/index.html'
+    '!site/assets/js/*',
+    '!site/assets/magnific-popup/magnific-popup.css',
+    '!site/assets/images/*',
+    '!site/assets/images/',
+    '!site/assets/thumbs/*',
+    '!site/assets/thumbs/',
+    '!site/assets/css/**/*',
+    '!site/assets/css/',
+    '!site/bower_components/**/*',
+    '!site/bower_components/',
     ],{
      dot:true
     }).pipe(gulp.dest('dist'))
-      .pipe($.size({title: 'copy'}));
+      .pipe($.size({title: 'Copy'}));
 });
+
 
 // Watch Files For Changes & Reload
 gulp.task('serve', function () {
   browserSync({
-    proxy: "multicolumn.local/site/"
+    proxy: "multicolumn.local/dist",
+    port: 3001
   });
 
   // watch for changes
   gulp.watch([
-    'site/*.html',
     'site/assets/css/**/*.css',
     'site/assets/js/**/*.js',
     'site/php/*.php'
   ]).on('change', reload);
 
-  gulp.watch('site/assets/css/**/*.scss', ['styles']);
-  gulp.watch(['site/assets/images/**/*.jpg'], ['images']);
-  // gulp.watch(['site/assets/js/**/*.js'], ['jshint']);
+  gulp.watch('site/assets/css/**/*.scss', ['sass']);
+  gulp.watch('site/assets/images/**/*', ['images']);
+  gulp.watch('site/*.html', ['html']);
+//  gulp.watch('site/assets/js/**/*.js', ['jshint']);
 });
 
-// resize images
- gulp.task('resize', function () {
-  gulp.src('site/assets/images/**/*.jpg')
 
-  .pipe(gm(function (gmfile) {
-    return gmfile.resize(300, 198);
-  }, {
-    imageMagick: true
-  }))
-
-  .pipe(gulp.dest('dist/assets/'));
+gulp.task('resize', function () {
+  gulp.src('site/assets/images/*.jpg')
+    .pipe(imageResize({ 
+      width : 200,
+      crop : false,
+      upscale : false
+    }))
+    .pipe(gulp.dest('dist/assets/thumbs/'));
 });
 
 // Optimize Images
 gulp.task('images', function () {
-  return gulp.src('site/assets/**/*.+(jpg|png)')
+  return gulp.src('./site/assets/images/*.jpg')
+  .pipe(jpegtran({progressive: true})())
     .pipe($.cache($.imagemin({
       progressive: true,
-      interlaced: true,
-      optimizationLevel: 5
+      interlaced: true
     })))
-    .pipe(gulp.dest('dist/assets/'))
+    .pipe(gulp.dest('./dist/assets/images'))
     .pipe(reload({stream: true, once: true}))
     .pipe($.size({title: 'images'}));
 });
 
-// watch task
-gulp.task('watch', function () {
-    gulp.watch('site/assets/js/**/*.js', ['js']);
-});
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['dist']));
 
-gulp.task('cleanApp', del.bind(null, ['app']));
-
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
-  runSequence('images', ['html', 'js', 'styles', 'copy'], 'cleanApp', cb);
-});
-
-gulp.task('mobile', function () {
-    return pagespeed(site, {
-        // key: key
-        nokey: 'true',
-        strategy: 'mobile',
-    }, function (err, data) {
-        console.log(data.score);
-        console.log(data.pageStats);
-    });
-});
-
-gulp.task('desktop', function () {
-    return pagespeed(site, {
-        // key: key
-        nokey: 'true',
-        strategy: 'desktop',
-    }, function (err, data) {
-        console.log(data.score);
-        console.log(data.pageStats);
-    });
+  runSequence(['copy', 'js'], cb);
 });

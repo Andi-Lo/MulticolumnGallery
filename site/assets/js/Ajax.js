@@ -6,48 +6,87 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Examples and documentation available on the project homepage
- * http://bithugger.github.io/MulticolumnGallery/
- * bla
+ * http://andi-lo.github.io/MulticolumnGallery/
+ * 
  */
 
+
+// require modules via browserify's 'require' statement
+var columnBuilder = require('./ColumnBuilder');
+var resizeController = require('./ResizeController');
+var scrollController = require('./ScrollController');
+
+// some pseudo constants for better reading
 var REQUEST_PENDING = 2;
 var REQUEST_SUCCESS = 4;
-var requestResult;
-var galleryController;
 
+// the ajax data request result object
+var requestResult;
+
+// static property
+var galleryController = (function() {
+  var galleryController = ''; // This is the private persistent value
+   return function() { return galleryController; }; 
+})(); // Invoke the outer function after defining it.
+
+
+// static property
+var colBuilder = (function() {
+  var colBuilder = ''; // This is the private persistent value
+   return function() { return colBuilder; };
+})(); // Invoke the outer function after defining it.
+
+
+// this is the js entry point. After loading the dom, get startet to request the gallery.php file
 window.addEventListener('DOMContentLoaded', function(){
-  var gal = new GalleryFactory(getColumnBuilder());
+  var gal = new GalleryFactory();
   gal.requestGallery();
 
 }, false);
 
-function addControllers(){
-  var scrlCtrl = new ScrollController();
-  var resizeCtrl = new ResizeController();
-  galleryController = {
-                     'scrlCtrl': scrlCtrl,
-                     'resizeCtrl': resizeCtrl
-                    };
+/**
+ * After the ajax request success, create controller instances and add event listeners to the document
+ */
+var addControllers = function (){
+  var scrlCtrl = new scrollController(requestResult, colBuilder);
+  var resizeCtrl = new resizeController(requestResult, colBuilder);
+  galleryController = {'scrlCtrl': scrlCtrl, 'resizeCtrl': resizeCtrl};
 
-  window.addEventListener('scroll', scrlCtrl.handleScroll, true);
-  window.addEventListener('resize', scrlCtrl.updateWidth, false);
-  window.addEventListener('resize', resizeCtrl.handleResize, false);
+  resizeCtrl.setController(galleryController);
+  scrlCtrl.setController(galleryController);
+
+  window.addEventListener('scroll', scrollWrapper, false);
+  window.addEventListener('resize', updateWidth, false);
+  window.addEventListener('resize', resizeWrapper, false);
   return galleryController;
-}
+};
 
+var scrollWrapper = function() {
+  galleryController.scrlCtrl.handleScroll(colBuilder, galleryController, requestResult);
+};
+
+var resizeWrapper = function() {
+  galleryController.resizeCtrl.handleResize(colBuilder, galleryController, requestResult);
+};
+
+var updateWidth = function() {
+  galleryController.scrlCtrl.updateWidth(galleryController);
+};
 
 /**
  * Gallery Factory for creating gallery Objects
- * @method requestGallery()
+ * Makes the Ajax server request to get the gallery.php file
  */
-var GalleryFactory = function (colBuilder) {
-  this.colBuilder = colBuilder;
+var GalleryFactory = function () {
+  'use strict';
+
   this.hasColumns = -1;
   this.columns = 0;
   this.names = "";
   this.resize = "";
   this.fadeIn = "";
   this.columnHeight = "";
+  this.galleryHeight = 0;
   this.gallery = document.getElementById('gallery');
   this.galleryWidth = gallery.offsetWidth;
   this.galleryHeight = gallery.offsetHeight;
@@ -76,7 +115,6 @@ var GalleryFactory = function (colBuilder) {
     return encodedString;
   };
 
-
   /**
    * Sends an Ajax request to the server and recieves the gallery
    * @return {boolean}     true on success false on failure
@@ -90,9 +128,11 @@ var GalleryFactory = function (colBuilder) {
     request.onreadystatechange = function(){
       switch(request.readyState) {
         case REQUEST_PENDING:
+          console.log('pending');
           document.getElementsByClassName('ajax-loading')[0].style.display = 'block';
           break;
         case REQUEST_SUCCESS:
+          console.log('success');
           document.getElementsByClassName('ajax-loading')[0].style.display = 'none';
       }
     };
@@ -104,32 +144,34 @@ var GalleryFactory = function (colBuilder) {
 
         /* Success! */
         var data = JSON.parse(request.responseText);
+        console.log(data);
         requestResult = data;
-        columns = data.numOfColumns;
-        queries = data.mediaQueries;
-        names = data.columnNames;
-        resize = data.resize;
-        fadeIn = data.fadeIn;
-        columnHeight = data.columnHeight;
-        activeColumn = data.activeColumn +"_Columns";
+        colBuilder = new columnBuilder.ColumnBuilder(requestResult);
+        this.columns = data.numOfColumns;
+        this.queries = data.mediaQueries;
+        this.names = data.columnNames;
+        this.resize = data.resize;
+        this.fadeIn = data.fadeIn;
+        this.columnHeight = data.columnHeight;
+        this.activeColumn = data.activeColumn +"_Columns";
+        this.galleryHeight = data.galleryHeight;
 
         var controller = addControllers();
         
-        for (var i = 0; i < columns; i++) {
+        for (var i = 0; i < this.columns; i++) {
           if(i === 0){
-            colBuilder.buildColumn(names[i]);
-            controller.scrlCtrl.refreshScreen();
+            colBuilder.buildColumn(this.names[i], requestResult);
+            controller.scrlCtrl.refreshScreen(controller.scrlCtrl);
           }else{
-            if(window.innerWidth >= queries[i]){
-              colBuilder.buildColumn(activeColumn);
-              controller.scrlCtrl.refreshScreen();
+            if(window.innerWidth >= this.queries[i]){
+              colBuilder.buildColumn(this.activeColumn, requestResult);
+              controller.scrlCtrl.refreshScreen(controller.scrlCtrl);
             }
           }
         }
         return true;
       } else {
         /* We reached our target server, but it returned an error */
-
         return false;
       }
     };
@@ -144,5 +186,4 @@ var GalleryFactory = function (colBuilder) {
     request.send(urlEncode(this.sData));
     return true;
   };
-  
 };

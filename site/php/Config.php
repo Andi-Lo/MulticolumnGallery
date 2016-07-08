@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Examples and documentation available on the project homepage
- * http://bithugger.github.io/MulticolumnGallery/
+ * http://andi-lo.github.io/MulticolumnGallery/
  * 
  */
 
@@ -29,7 +29,6 @@ class Config{
   public $fadeIn = 'yes';
   public $shuffle = '';
   public $sortAfterDate = '';
-  public $caching = '';
   private static $_config_path = '../config/config.json';
 
   function __construct()
@@ -51,7 +50,6 @@ class Config{
     $this->fadeIn = $json['fade_in_pictures'];
     $this->shuffle = $json['shuffle_pictures'];
     $this->sortAfterDate = $json['sort_pictures_after_date_taken'];
-    $this->caching = $json['set_cache_on'];
     $this->margin_bottom = $json['margin_bottom'];
   }
 }

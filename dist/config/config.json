@@ -15,6 +15,5 @@
   "resize_columns": "yes",
   "fade_in_pictures": "yes",
   "shuffle_pictures": "no",
-  "sort_pictures_after_date_taken": "yes",
-  "set_cache_on": "no"
+  "sort_pictures_after_date_taken": "yes"
 }

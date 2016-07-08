@@ -6,3 +6,5 @@ node_modules
 app/php/cache/*.json
 dist/php/cache/*.json
 !.gitkeep
+/dist/bower_components
+/site/bower_components

@@ -7,12 +7,20 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Examples and documentation available on the project homepage
- * http://bithugger.github.io/MulticolumnGallery/
+ * http://andi-lo.github.io/MulticolumnGallery/
  * 
  */
 
 require_once 'Gallery.php';
 
+/**
+ * The Column class
+ * @method {Column[]} getColumn(int, Image[])
+ * @method {int[]}    getGalleryHeight()
+ * @method {Column}   calcColumn(int, Image[])
+ * @method {void}     calcDispVal(img, int)
+ * @method {array[]}  calcQueries()
+ */
 class Column{
   public $id = 0;
   public $imgName = "";
@@ -28,7 +36,10 @@ class Column{
   public static $_init = false;               // just initialize the class once
   public static $_columnHeight = array();     // contains all column heights
 
-  /* Build an dynamic sized container array to store the height of each column */
+
+  /**
+   * Init function builds an dynamic sized container array to store the height of each column 
+   */
   private static function initClass()
   {
     $numOfColumns = Gallery::getNumOfColumns();
@@ -41,7 +52,12 @@ class Column{
     }
   }
 
-  /* get a column with the given amount back */
+  /**
+   * get a column with the given amount back
+   * @param  [type] $numOfColumns [description]
+   * @param  [type] $images       [description]
+   * @return [type]               [description]
+   */
   public static function getColumn($numOfColumns, $images)
   {
     if(! self::$_init){
@@ -60,7 +76,36 @@ class Column{
     }
   }
 
-  /* calculate the image positions for each column */
+  /**
+   * Get the gallery height + MARGIN_BOTTOM (if defined in config.json)
+   * @return Array   Returns an array with key => value pairs. Key represents the number of the column; Value represents the gallery hight
+   */
+  public static function getGalleryHeight()
+  {
+    $columnHeight = self::$_columnHeight;
+
+    for ($i=0; $i < sizeof($columnHeight); $i++) {       
+      // sort column hight: highest to lowest (dont keep keys)
+      rsort($columnHeight[$i]);
+    }
+
+    // get the first column of the array
+    $columnHeight = array_column($columnHeight, 0);
+
+    for ($i=0; $i < sizeof($columnHeight); $i++) { 
+      $columnHeight[$i] = $columnHeight[$i] + MARGIN_BOTTOM - PAD_TOP;
+    }
+
+    return $columnHeight;
+  }
+
+
+  /**
+   * calculate the image positions for each column
+   * @param  int $columnNr    the amount of columns you want to get
+   * @param  Image[] $img       the images to be placed in columns
+   * @return Column           the calculated Column
+   */
   public static function calcColumn($columnNr, $img)
   {
     global $config;
@@ -123,9 +168,6 @@ class Column{
     }
   }
 
-  // usort() comparison function for Person objects
-  
-
   private function initProperties($column, $img)
   {
     $column->id = $img->id;
@@ -138,7 +180,12 @@ class Column{
     $column->dateTaken = $img->dateTaken;
   }
 
-  /* calc the image ratio to keep formats */
+  /**
+   * Calc the image ratio to keep formats
+   * @param  Image $img      the Image you want to calculate ratios
+   * @param  int   $imgSize  the size of the image
+   * @return [type]          [description]
+   */
   public function calcDispVal($img, $imgSize)
   {
     $imgRatio = 0;
@@ -147,7 +194,10 @@ class Column{
     $img->displayHeight = (int)($imgRatio * $img->height);
   }
 
-  /* calc media queries for responsivness */
+  /**
+   * calc media queries for responsivness
+   * @return Array   array with media queries
+   */
   public function calcQueries()
   {
     global $config;

@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Examples and documentation available on the project homepage
- * http://bithugger.github.io/MulticolumnGallery/
+ * http://andi-lo.github.io/MulticolumnGallery/
  * 
  */
  
@@ -60,8 +60,9 @@ class Image{
       $images[] = $img;
     }
 
-    if($config->sortAfterDate === 'yes')
+    if($config->sortAfterDate === 'yes'){
       usort($images, "dateTakenSort");
+    }
 
     self::setIds($images);
     return $images;
@@ -127,7 +128,7 @@ class Image{
         // if the readed file is actually an image
         if(Image::isImage($value)) {
 
-          // search is true when thumbnails and images are set in same folder via config.json file
+          // true when thumbnails and images are set in same folder via config.json file
           if($search === true){
   
             // if prefix or postfix is not found, sort it into "names" array

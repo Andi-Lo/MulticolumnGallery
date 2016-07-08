@@ -11,7 +11,7 @@
 	to { -webkit-transform: rotate(1turn); transform: rotate(1turn); }
 }
  
-.progress {
+.mult-progress {
 	position: relative;
 	display: inline-block;
 	width: 5em;
@@ -24,18 +24,18 @@
 	        animation: spin 1s infinite steps(8);
 }
  
-.small.progress {
+.small.mult-progress {
 	font-size: 6px;
 }
  
-.large.progress {
+.large.mult-progress {
 	font-size: 24px;
 }
  
-.progress:before,
-.progress:after,
-.progress > div:before,
-.progress > div:after {
+.mult-progress:before,
+.mult-progress:after,
+.mult-progress > div:before,
+.mult-progress > div:after {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -43,29 +43,29 @@
 	width: .5em;
 	height: 1.5em;
 	border-radius: .2em;
-	background: #eee;
-	box-shadow: 0 3.5em #eee; /* container height - part height */
+	background: #fff;
+	box-shadow: 0 3.5em #fff; /* container height - part height */
 	-webkit-transform-origin: 50% 2.5em;
 	        transform-origin: 50% 2.5em; /* container height / 2 */
 }
  
-.progress:before {
+.mult-progress:before {
 	background: #555;
 }
  
-.progress:after {
+.mult-progress:after {
 	-webkit-transform: rotate(-45deg);
 	        transform: rotate(-45deg);
 	background: #777;
 }
  
-.progress > div:before {
+.mult-progress > div:before {
 	-webkit-transform: rotate(-90deg);
 	        transform: rotate(-90deg);
 	background: #999;
 }
  
-.progress > div:after {
+.mult-progress > div:after {
 	-webkit-transform: rotate(-135deg);
 	        transform: rotate(-135deg);
 	background: #bbb;

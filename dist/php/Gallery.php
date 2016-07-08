@@ -7,9 +7,12 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Examples and documentation available on the project homepage
- * http://bithugger.github.io/MulticolumnGallery/
+ * http://andi-lo.github.io/MulticolumnGallery/
  * 
  */
+header('Content-Type: text/javascript');
+header('Accept-Encoding: gzip');
+ob_start('ob_gzhandler');
  
 require_once 'Column.php';
 require_once 'Config.php';
@@ -53,20 +56,8 @@ class Gallery{
     $requestWidth = $request['width'];
     $galleryWidth = $request['galleryWidth'];
     $columnNames = array();
-    $numOfCOlumns = -1;
-
-    if($config->caching == "yes" && $config->shuffle != 'yes') {
-      $tmpNames = Image::readDirectory(DIR_PATH_IMAGES);
-      $serveFromCache = Gallery::compareCache($tmpNames, 'cache/names.json');
-      $configNames = json_decode(file_get_contents('../config/config.json'));
-      $confNotChanged = Gallery::compareCache($configNames, 'cache/config.json');
-
-      if(($serveFromCache === true) && ($confNotChanged === true)) {
-        if(Gallery::serveFromCache()){
-          return;
-        }
-      }
-    }
+    $galleryHeight = "";
+    $numOfColumns = -1;
 
     self::setNumOfColumns($galleryWidth);
     $numOfColumns = self::getNumOfColumns();
@@ -93,11 +84,15 @@ class Gallery{
         'activeColumn'  => $activeColumn,
       );
 
+
     for ($i=0; $i < $numOfColumns; $i++) {
       self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
-      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY + MARGIN_BOTTOM;
+      $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
     }
 
+    $galleryHeight = $column->getGalleryHeight();
+
+    self::$_columnContainer['galleryHeight'] = $galleryHeight;
     self::$_columnContainer['columnHeight'] = $columnHeight;
     self::printJSON();
   }
@@ -120,9 +115,12 @@ class Gallery{
 
     if($galleryWidth >= $onePicture) {
       $tmp = $galleryWidth / $nPictures;
-      // echo $tmp . "\n";
       $numOfColumns = intval($tmp);
-      self::$_numOfColumns = $numOfColumns;
+      if($numOfColumns > NUM_OF_COLUMNS) {
+        self::$_numOfColumns = NUM_OF_COLUMNS;
+      } else {
+        self::$_numOfColumns = $numOfColumns;
+      }
     } 
     else {
       self::$_numOfColumns = 1;
@@ -137,17 +135,6 @@ class Gallery{
   {
     global $config;
     header("content-type:application/json");
-    if($config->caching == "yes" && $config->shuffle != "yes"){
-      // write to cache file to reuse without recalculation
-      if(file_exists("cache/cache.json")){
-        file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-      } 
-      // create a new file if doesnt exist and write to it
-      else {
-        self::createFile('cache/cache.json');
-        file_put_contents('cache/cache.json', json_encode(self::$_columnContainer));
-      }
-    }
     echo (json_encode(self::$_columnContainer));
   }
 
@@ -164,7 +151,6 @@ class Gallery{
   {
     // init variables
     $tmpDiff = 0;
-    $key = -1;
 
     if($requestWidth < $galleryWidth) {
       $galleryWidth = $requestWidth;
@@ -181,14 +167,14 @@ class Gallery{
 
       // find the smallest difference
       $diff = $galleryWidth - $value;
-      // echo "diff: " . $diff . " \n" . "tmpdiff: " . $tmpDiff;
       if ($diff < $tmpDiff && $diff > 0 || $tmpDiff == 0) {
         $tmpDiff = $diff;
-        $key = $query;
-
+      }
+      if($query+1 > self::$_numOfColumns) {
+        return self::$_numOfColumns;
       }
     }
-    return $key+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
+    return $query+1;      // +1 because columns-names run from 1 to 5 not from 0 to 4
   }
 
   /**
@@ -208,56 +194,7 @@ class Gallery{
       return false;
     }
   }
-
-  /**
-   * Sends Images to the Client from Cache
-   * @return boolean true on success else false
-   * @todo   http://stackoverflow.com/questions/17612962/possible-to-cache-json-to-increase-performance-load-time
-   * caching not working if stored on server. Has to be stored on client
-   */
-  public function serveFromCache()
-  {
-    if(file_exists('cache/cache.json')){
-      header("content-type:application/json");
-      $s = json_decode(file_get_contents('cache/cache.json'));
-      echo (json_encode($s));
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * compares if the cached file is the same as the given input
-   * @param  array $names 
-   * @return boolean        true if same else false
-   */
-  public function compareCache($names, $cachedName)
-  {
-    if(file_exists($cachedName)) {
-      $compareNames = json_decode(file_get_contents($cachedName));
-      if($compareNames == $names) {
-        // hurray we are same!"
-        return true;
-      } else {
-        // we are not same :(
-        file_put_contents($cachedName, json_encode($names));
-        return false;
-      }
-    } else {
-      if(Gallery::createFile($cachedName)){
-        file_put_contents($cachedName, json_encode($names));
-        return true;
-      }
-      return false;
-    }
-    return false;
-  }
   
-  public function debugConsole($data)
-  {
-    echo $data." \n";
-  }
 }
 ?>
 
