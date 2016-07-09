@@ -12,6 +12,7 @@
  */
  
 require_once 'Gallery.php';
+require_once 'Thumbnail.php';
 
 function dateTakenSort( &$a, $b ) {
   return $a->dateTaken == $b->dateTaken ? 0 : ( $a->dateTaken < $b->dateTaken ) ? 1 : -1;
@@ -31,31 +32,30 @@ class Image{
   public $thumbnail = "";
   public $dateTaken = 0;
 
-  public static $_thumbNames = array(); 
+  private static $_thumbNames = array(); 
 
-  public function initializing()
-  {
+  public function initializing() {
     global $config;
-    $imgDirPath = $config->image_path;
-    $thumbDirPath = $config->thumb_path;
     $images = array();
     $names = array();
-    $names = $this->readDirectory(DIR_PATH_IMAGES);
-    if($imgDirPath !== $thumbDirPath)
-      self::$_thumbNames = $this->readDirectory(DIR_PATH_THUMBNAILS);
+    $names = Gallery::readDir(DIR_PATH_IMAGES);
+    self::$_thumbNames = Gallery::readDir(DIR_PATH_THUMBNAILS);
     
     if($config->shuffle === 'yes'){
       shuffle($names);
     }
 
     // set properties
-    foreach($names as $value){
-      $imgPath = DIR_PATH_IMAGES."$value";
+    foreach($names as $imgName){
       $img = new Image();
-      $img->imgPath = PATH_IMAGES."$value";
-      $img->imgName = $value;
-      $img->thumbnail = $img->setThumbnailName($img);
+      $imgPath = DIR_PATH_IMAGES."$imgName";
+      $img->imgPath = PATH_IMAGES."$imgName";
+      $img->imgName = $imgName;
       $img->readMetadata($imgPath, $img);
+      $img->thumbnail = $img->setThumbnailName($img);
+      if($img->thumbnailPath == "" || $img->thumbnail == "file_not_found" ) {
+        Thumbnail::makeThumbs($img);
+      }
       $img->dateTaken = $img->getDateTaken($imgPath);
       $images[] = $img;
     }
@@ -81,6 +81,7 @@ class Image{
       $id++;
     }
   }
+
   
   /**
    * reads all files of a directory. If in config.json the image directory is the same
@@ -89,7 +90,7 @@ class Image{
    * @param  string $dirPath the folder to read
    * @return string[]        names of files in folder or FALSE on error  
    */
-  public static function readDirectory($dirPath)
+  /*public static function readDirectory($dirPath)
   {
     $names = array();
     global $config;
@@ -123,34 +124,38 @@ class Image{
       $scanned_directory = array_diff(scandir($dirPath), array('..', '.'));
 
       // for every file in folder, get its names
-      foreach ($scanned_directory as $key => $value) {
+      foreach ($scanned_directory as $images => $image) {
 
         // if the readed file is actually an image
-        if(Image::isImage($value)) {
+        if(Image::isImage($image)) {
 
           // true when thumbnails and images are set in same folder via config.json file
           if($search === true){
   
             // if prefix or postfix is not found, sort it into "names" array
-            $pos = (strpos($value, $findme));
+            $pos = (strpos($image, $findme));
 
             if($pos !== 0)
-              $names[] = $value; 
+              $names[] = $image; 
 
             // else its a thumbnail belonging to an image
             else 
-              self::$_thumbNames[] = $value;
+              self::$_thumbNames[] = $image;
             
           } else {
-            $names[] = $value;
+            $names[] = $image;
           }
 
         }
       }
       return $names;
-    } else echo "readDirectory failed: no such directory found<br>";
+    } 
+    else  {
+      echo "readDirectory failed: no such directory found<br>";
+    }
     return false;
-  }
+  }*/
+
 
   /**
    * Reads data out of an Image: width, height, type, attr (w*h)
@@ -168,7 +173,7 @@ class Image{
   }
 
   /**
-   * sets the thumbnail Name property to a given Image object
+   * sets the thumbnail Name property to a given Image object so that a thumbnail belongs to the appropriate image
    * @param object $img Image
    * @return string Thumnail name or an error message
    * @todo  Transform image file type to lowercase befor checking it so that
@@ -181,46 +186,49 @@ class Image{
     $postfix = $config->thumbnail_postfix;
     $imgDirPath = $config->image_path;
     $thumbDirPath = $config->thumb_path;
+    $thumbnail = self::getThumbNames();
 
-    $findme = array('.jpg','.jpeg','.png');
+    $fileTypes = array('.jpg','.jpeg','.png');
 
-    // if thumbnails an images lie in the same folder and the
-    // config file has set a prefix or postfix value that issnt an empty string ""
     if($prefix !== "" || $postfix !== "" || $imgDirPath !== $thumbDirPath) {
       
       // for file ending in files
-      foreach ($findme as $format) {
+      foreach ($fileTypes as $filetype) {
 
         // for thumbnail in thumbnails
-        foreach (self::$_thumbNames as $thumb_name) {
+        foreach ($thumbnail as $thumbsName) {
 
           // $pos is the string position of the file type e.g. .jpg
-          $pos = strpos($img->imgName, $format);
+          $pos = strpos($img->imgName, $filetype);
 
-          // extract file name from file.type
+          // extract file name from file
           $substring = substr($img->imgName, 0, $pos);
 
-          // if Thumbnail name was found in folder
-          if($prefix.$substring.$postfix.$format == $thumb_name) {
+          // if thumbnail name was found in folder
+          if($prefix.$substring.$postfix.$filetype == $thumbsName) {
 
           // set thumbnail path
-            $img->thumbnailPath = PATH_THUMBNAILS.                        
-                $prefix.$substring.$postfix.$format;
+            $img->thumbnailPath = PATH_THUMBNAILS. 
+                $prefix.$substring.$postfix.$filetype;
 
             // return thumbnail name as string (bsp: prefix+myimagename+postfix.jpg)
-            return $prefix.$substring.$postfix.$format;
+            return $prefix.$substring.$postfix.$filetype;
           } /* maybe not needed cause of config file */
-          elseif($substring.$format == $thumb_name) {
-            $img->thumbnailPath = PATH_THUMBNAILS.$substring.$format;
+          elseif($substring.$filetype == $thumbsName) {
+            $img->thumbnailPath = PATH_THUMBNAILS.$substring.$filetype;
 
             // return thumbnail name as string (bsp: thumb_IMG2342.jpg)
-            return $substring.$format;
+            return $substring.$filetype;
           }
         }
       }
     }
     // no thumbnail for given image file found
     return "file_not_found";
+  }
+
+  private function getThumbNames() {
+    return self::$_thumbNames;
   }
 
 
@@ -241,12 +249,14 @@ class Image{
     foreach ($supportedFormats as $format) {
 
       // see if one of the file endings is found
-      if(strpos($filename, $format))
+      if(strpos($filename, $format)) {
         return true;
+      }
 
       // file format not found 
-      else 
+      else {
         return false;
+      }
     }
   }
 

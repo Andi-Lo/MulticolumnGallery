@@ -52,6 +52,11 @@ class Config{
     $this->sortAfterDate = $json['sort_pictures_after_date_taken'];
     $this->margin_bottom = $json['margin_bottom'];
   }
+
+  public static function getConfig() {
+    return $this;
+  }
+
 }
 
 ?>

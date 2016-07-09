@@ -68,6 +68,7 @@ var ColumnBuilder = function () {
 
     outerImg.setAttribute('class', 'mult-image');
     outerImg.setAttribute('href', image.imgPath);
+    outerImg.setAttribute('title', image.imgName);
 
     innerImg.setAttribute('class', "mult-image-inner");
     innerImg.setAttribute('style', 'position:absolute; top:' + image.posY + 'px; left:' + image.posX + 'px; width:' + image.width + 'px; height:' + image.height  + 'px; visibility:' + visiblity + '; ' + 'opacity: ' + opacity + ';');

@@ -44,9 +44,9 @@ class Gallery{
 
   public static $_columnContainer = array();
   private static $_numOfColumns = -1;
+  // public $config;
   
-  function __construct()
-  {
+  public function __construct() {
     global $config;
     $column = new Column();
     $images = new Image();
@@ -64,7 +64,7 @@ class Gallery{
 
     // set the column Names (1_Column to n_Columns)
     for ($i=1; $i <= $numOfColumns; $i++) { 
-      if($i == 1)
+      if(1 == $i)
         $columnNames[] = $i.'_Column';
        else
         $columnNames[] = $i.'_Columns';
@@ -84,7 +84,6 @@ class Gallery{
         'activeColumn'  => $activeColumn,
       );
 
-
     for ($i=0; $i < $numOfColumns; $i++) {
       self::$_columnContainer[$columnNames[$i]] = $column->getColumn($i, $images);
       $columnHeight[] = end(self::$_columnContainer[$columnNames[$i]])->posY;
@@ -94,24 +93,20 @@ class Gallery{
 
     self::$_columnContainer['galleryHeight'] = $galleryHeight;
     self::$_columnContainer['columnHeight'] = $columnHeight;
-    self::printJSON();
+    self::printJSON(self::$_columnContainer);
   }
 
   private function setNumOfColumns($galleryWidth) {
     global $config;
-
+    
     if($config->center == 'yes') {
       $galleryWidth = (($galleryWidth - PAD) - PAD_LEFT_HD) - PAD_RIGHT;
-      // echo $galleryWidth . "\n";
     } else {
       $galleryWidth = ($galleryWidth - PAD_LEFT_HDR) - PAD_RIGHT;
-      // echo $galleryWidth . "\n";
     }
 
     $onePicture = PAD_LEFT_HDR + THUMB_WIDTH + PAD;
     $nPictures = THUMB_WIDTH + PAD;
-    // echo $nPictures . "\n";
-
 
     if($galleryWidth >= $onePicture) {
       $tmp = $galleryWidth / $nPictures;
@@ -127,15 +122,14 @@ class Gallery{
     }
   }
 
-  public function getNumOfColumns() {
+  public static function getNumOfColumns() {
     return self::$_numOfColumns;
   }
 
-  public function printJSON()
+  public function printJSON($data)
   {
-    global $config;
     header("content-type:application/json");
-    echo (json_encode(self::$_columnContainer));
+    echo (json_encode($data));
   }
 
   /**
@@ -182,7 +176,7 @@ class Gallery{
    * @param  String $filename
    * @return boolean          true if file created else false
    */
-  public function createFile($filename)
+  public static function createFile($filename)
   {
     if(!(file_exists($filename))){
 
@@ -192,6 +186,36 @@ class Gallery{
     } 
     else {
       return false;
+    }
+  }
+
+    /**
+   * reads all files of a directory
+   * @param  string $dirPath the folder to read
+   * @return string[]        names of files in folder or FALSE on error  
+   */
+  public static function readDir($dirPath) {
+    $names = array();
+
+    // given path is a folder?
+    if(is_dir($dirPath)){
+
+      // extract ". .." childs from array
+      $scanned_directory = array_diff(scandir($dirPath), array('..', '.'));
+
+      // for every file in folder, get its names
+      foreach ($scanned_directory as $images => $image) {
+
+        // if the readed file is actually an image
+        if(Image::isImage($image)) {
+
+          $names[] = $image;
+        }
+      }
+      return $names;
+    } 
+    else  {
+      echo "readDirectory failed: no such directory " .$dirPath . " found <br>";
     }
   }
   

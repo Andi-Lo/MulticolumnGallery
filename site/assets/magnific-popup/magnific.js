@@ -13,8 +13,8 @@ $(document).ready(function() {
       cursor: 'null',
       tError: '<a href="%url%">The image </a> could not be loaded.',
       titleSrc: function(item) {
-        // return item.el.attr('title') + '<small>by Andreas Lorer</small>';
-        return '<small> &#169; by Your Name here</small>';
+        return item.el.attr('title') + '<small>&#169; Your Name here</small>';
+        // return '<small> &#169; by Your Name here</small>';
       }
     }
   });
