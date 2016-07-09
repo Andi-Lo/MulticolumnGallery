@@ -109,12 +109,12 @@ class Thumbnail{
         imagecopyresampled($echofile_id, $sourcefile_id, 0, 0, $c1['x'], $c1['y'], $thumbWidth, $thumbHeight, $imageWidth, $imageHeight);
 
         // replace Thumbnail
-        if(!$replace && file_exists($imagedir.$prefix.$filename.$suffix.".".$fileType))
-          return $imagedir.$prefix.$filename.$suffix.".".$fileType;
-        elseif($replace && file_exists($imagedir.$prefix.$filename.$suffix.".".$fileType)){
+        if(!$replace && file_exists($thumbdir.$prefix.$filename.$suffix.".".$fileType))
+          return $thumbdir.$prefix.$filename.$suffix.".".$fileType;
+        elseif($replace && file_exists($thumbdir.$prefix.$filename.$suffix.".".$fileType)){
           clearstatcache();
-          chmod($imagedir.$prefix.$filename.$suffix.".".$fileType, 0777);
-          unlink($imagedir.$prefix.$filename.$suffix.".".$fileType);
+          chmod($thumbdir.$prefix.$filename.$suffix.".".$fileType, 0777);
+          unlink($thumbdir.$prefix.$filename.$suffix.".".$fileType);
         } 
 
         switch($fileType){
@@ -129,7 +129,7 @@ class Thumbnail{
         @imagedestroy($sourcefile_id);
         @imagedestroy($echofile_id);
 
-        return $imagedir.$prefix.$filename.$suffix.".".$fileType;
+        return $thumbdir.$prefix.$filename.$suffix.".".$fileType;
       }// falls Bild ein gif ist
       else 
         return false;

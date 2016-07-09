@@ -36,10 +36,16 @@ class Image{
 
   public function initializing() {
     global $config;
+    $imgDirPath = $config->image_path;
+    $thumbDirPath = $config->thumb_path;
     $images = array();
     $names = array();
-    $names = Gallery::readDir(DIR_PATH_IMAGES);
-    self::$_thumbNames = Gallery::readDir(DIR_PATH_THUMBNAILS);
+    // $names = Gallery::readDir(DIR_PATH_IMAGES);
+    // self::$_thumbNames = Gallery::readDir(DIR_PATH_THUMBNAILS);
+    $names = $this->readDirectory(DIR_PATH_IMAGES);
+    if($imgDirPath !== $thumbDirPath) {
+      self::$_thumbNames = $this->readDirectory(DIR_PATH_THUMBNAILS);
+    }
     
     if($config->shuffle === 'yes'){
       shuffle($names);
@@ -82,7 +88,6 @@ class Image{
     }
   }
 
-  // deprecated replaced for Gallery::readDir(), not sure if needed 
   /**
    * reads all files of a directory. If in config.json the image directory is the same
    * as the thumbnail directory, the function will sort thumbnails into the static 
@@ -90,7 +95,7 @@ class Image{
    * @param  string $dirPath the folder to read
    * @return string[]        names of files in folder or FALSE on error  
    */
-  /*public static function readDirectory($dirPath)
+  public static function readDirectory($dirPath)
   {
     $names = array();
     global $config;
@@ -135,12 +140,13 @@ class Image{
             // if prefix or postfix is not found, sort it into "names" array
             $pos = (strpos($image, $findme));
 
-            if($pos !== 0)
+            if($pos !== 0) {
               $names[] = $image; 
-
+            }
             // else its a thumbnail belonging to an image
-            else 
+            else {
               self::$_thumbNames[] = $image;
+            }
             
           } else {
             $names[] = $image;
@@ -154,7 +160,7 @@ class Image{
       echo "readDirectory failed: no such directory found<br>";
     }
     return false;
-  }*/
+  }
 
 
   /**
