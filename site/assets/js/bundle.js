@@ -494,8 +494,8 @@ var ScrollController = function(requestResult, columnBuilder) {
       /* to see a Visual effect of unhiding a picture I use an offset of -100 */
       /* != 'NaN' because css.('top') returns the 'top' value and 'auto', parsing 'auto' will return a value or 'NaN' */
       var tmp = scrlPos - offset;
-      // console.log(tmp + ' >= ' + cssTopValue + ' && ' + cssTopValue + ' != NAN ' + isHidden + ' == hidden' + ' fadeIn = '+fadeIn);
-      if(tmp >= cssTopValue && cssTopValue != 'NaN' && isHidden == 'hidden') {
+      if(tmp <= cssTopValue && cssTopValue != 'NaN' && isHidden == 'hidden') {
+        console.log(tmp + ' <= ' + cssTopValue + ' ' + isHidden + ' == hidden');
         images[i].style.visibility = 'visible';
         if(fadeIn == 'yes'){
           if(images[i].style.opacity < 1) {
@@ -561,7 +561,7 @@ ScrollController.prototype.handleScroll = function(columnBuilder, galleryCtrl, r
   if(newScrollPos > scrollPosSave){
 
     if(window.innerWidth > 767){
-      scrlCtrl.refreshScreenOnScroll(100, scrlCtrl);
+      scrlCtrl.refreshScreenOnScroll(0, scrlCtrl);
     } 
     else{
       if(window.innerWidth <= 768){
