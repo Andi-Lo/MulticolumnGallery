@@ -82,7 +82,7 @@ class Image{
     }
   }
 
-  
+  // deprecated replaced for Gallery::readDir(), not sure if needed 
   /**
    * reads all files of a directory. If in config.json the image directory is the same
    * as the thumbnail directory, the function will sort thumbnails into the static 
@@ -163,7 +163,7 @@ class Image{
    * @param  [type] $img     [description]
    * @return [type]          [description]
    */
-  public function readMetadata($imgPath, $img)
+  public function readMetadata($imgPath, &$img)
   {  
     list($width, $height, $type, $attr) = getimagesize($imgPath);
     $img->width = $width;
@@ -179,7 +179,7 @@ class Image{
    * @todo  Transform image file type to lowercase befor checking it so that
    * JPG and jpg is supported.
    */
-  public function setThumbnailName($img)
+  public function setThumbnailName(&$img)
   {
     global $config;
     $prefix = $config->thumbnail_prefix;

@@ -168,7 +168,7 @@ class Column{
     }
   }
 
-  private function initProperties($column, $img)
+  private function initProperties(&$column, $img)
   {
     $column->id = $img->id;
     $column->imgName = $img->imgName;
@@ -186,7 +186,7 @@ class Column{
    * @param  int   $imgSize  the size of the image
    * @return [type]          [description]
    */
-  public function calcDispVal($img, $imgSize)
+  public function calcDispVal(&$img, $imgSize)
   {
     $imgRatio = 0;
     $img->displayWidth = $imgSize;
