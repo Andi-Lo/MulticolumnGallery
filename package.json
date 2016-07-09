@@ -1,6 +1,20 @@
 {
+  "name": "multicolumn gallery",
+  "version": "1.0.0",
+  "description": "Dynamic, customizable and responsive image gallery made with PHP and JS.",
+  "author": "Andreas Lorer <contact@andreaslorer.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Andi-Lo/MulticolumnGallery"
+  },
+  "bugs": {
+      "url": "https://github.com/Andi-Lo/MulticolumnGallery/issues"
+  },
+
+  "homepage": "http://andreaslorer.de",
+
   "devDependencies": {
- "autoprefixer-core": "^4.0.2",
+    "autoprefixer-core": "^4.0.2",
     "bower": "^1.3.12",
     "browser-sync": "^1.9.1",
     "browserify": "^8.1.3",
@@ -38,7 +52,6 @@
   },
   "scripts": {
     "start": "gulp serve",
-    "resize": "gulp resize",
     "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
