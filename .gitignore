@@ -8,3 +8,4 @@ dist/php/cache/*.json
 !.gitkeep
 /dist/bower_components
 /site/bower_components
+Thumbs.db
