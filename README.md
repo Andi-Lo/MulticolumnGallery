@@ -11,7 +11,7 @@ MulticolumnGallery
 * [License](#License)
 
 ## <a name="Description"></a>Description 
-Dynamic, customizable and responsive image gallery made with PHP and JS.  
+Dynamic, customizable and responsive image gallery made with PHP and JS.
 Show your best pictures to the world with a very minimalistic approach. No picture raiting, nor comments or taggin so your pictures stay in the spotlight!
 
 ## <a name="Features"></a>Features

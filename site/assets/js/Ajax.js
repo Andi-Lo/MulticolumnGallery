@@ -16,6 +16,8 @@ var columnBuilder = require('./ColumnBuilder');
 var resizeController = require('./ResizeController');
 var scrollController = require('./ScrollController');
 
+require('../magnific-popup/magnific-popup.js');
+
 // some pseudo constants for better reading
 var REQUEST_PENDING = 2;
 var REQUEST_SUCCESS = 4;

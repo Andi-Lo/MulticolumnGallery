@@ -8,7 +8,6 @@ var concat = require('gulp-concat');
 var glob = require('glob');
 var del = require('del');
 var $ = require('gulp-load-plugins')();
-var pagespeed = require('psi');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
@@ -21,11 +20,7 @@ var watchify = require('watchify');
 var browserify = require('browserify');
 var gulpBrowserify = require('gulp-browserify');
 var gulpif = require('gulp-if');
-var webp = require('gulp-webp');
 var rename = require('gulp-rename');
-var useref = require('gulp-useref');
-var jpegtran = require('imagemin-jpegtran');
-var site = 'http://www.andreaslorer.de';
 
 module.exports = gulp;
 
@@ -57,7 +52,6 @@ function bundle() {
       .pipe(buffer())
       .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
       .pipe(sourcemaps.write('./')) // writes .map file
-    .pipe(gulp.dest('./dist/assets/js/'))
     .pipe(gulp.dest('./site/assets/js/'));
 }
 
@@ -72,7 +66,7 @@ gulp.task('jshint', function () {
 
 // javascript
 gulp.task('js', ['buildBundle'], function () {
-  return gulp.src(['site/assets/js/*.js', 'dist/assets/js/bundle.js'])
+  return gulp.src('site/assets/js/*.js')
     .pipe(concat('bundle.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/assets/js/'));
@@ -110,47 +104,18 @@ gulp.task('copy', function () {
 // Watch Files For Changes & Reload
 gulp.task('serve', function () {
   browserSync({
-    proxy: "multicolumn.local/dist",
+    proxy: "multicolumn.local/site",
     port: 3001
   });
 
   // watch for changes
   gulp.watch([
-    'site/assets/css/**/*.css',
     'site/assets/js/**/*.js',
     'site/php/*.php'
   ]).on('change', reload);
 
-  gulp.watch('site/assets/css/**/*.scss', ['sass']);
-  gulp.watch('site/assets/images/**/*', ['images']);
-  gulp.watch('site/*.html', ['html']);
-//  gulp.watch('site/assets/js/**/*.js', ['jshint']);
+  gulp.watch('site/assets/js/**/*.js', ['jshint']);
 });
-
-
-gulp.task('resize', function () {
-  gulp.src('site/assets/images/*.jpg')
-    .pipe(imageResize({ 
-      width : 200,
-      crop : false,
-      upscale : false
-    }))
-    .pipe(gulp.dest('dist/assets/thumbs/'));
-});
-
-// Optimize Images
-gulp.task('images', function () {
-  return gulp.src('./site/assets/images/*.jpg')
-  .pipe(jpegtran({progressive: true})())
-    .pipe($.cache($.imagemin({
-      progressive: true,
-      interlaced: true
-    })))
-    .pipe(gulp.dest('./dist/assets/images'))
-    .pipe(reload({stream: true, once: true}))
-    .pipe($.size({title: 'images'}));
-});
-
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['dist']));
