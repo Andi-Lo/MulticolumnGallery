@@ -10,7 +10,6 @@
  * 
  */
 
-var scrollPosSave = 0;
 
 /**
  * Controller-Class to calculate, observe and manage if the picture visibility 
@@ -27,6 +26,7 @@ var ScrollController = function(requestResult, columnBuilder) {
 
   requestResult = requestResult;
   this.scrollEvents = 0;
+  this.scrollPosSave = 0;
   this.innerWinHeight = window.innerHeight;
   this.scrollHeight = this.innerWinHeight;
   this.winWidth = window.innerWidth;
@@ -71,22 +71,23 @@ var ScrollController = function(requestResult, columnBuilder) {
     var images = document.getElementsByClassName('mult-image-inner');
 
     for (var i = images.length - 1; i >= 0; i--) {
-      var style = window.getComputedStyle(images[i]),
-          cssTopValue = parseInt(style.getPropertyValue('top'), 10),
-          isHidden = images[i].style.visibility;
+      var style = window.getComputedStyle(images[i]);
+      var cssTopValue = parseInt(style.getPropertyValue('top'), 10);
+      var isHidden = images[i].style.visibility;
 
-      /* to see a Visual effect of unhiding a picture I use an offset of -100 */
+      /* to see a Visual effect of unhiding a picture I use an offset of e.g. -100 */
       /* != 'NaN' because css.('top') returns the 'top' value and 'auto', parsing 'auto' will return a value or 'NaN' */
-      var tmp = scrlPos - offset;
-      if(tmp <= cssTopValue && cssTopValue != 'NaN' && isHidden == 'hidden') {
-        console.log(tmp + ' <= ' + cssTopValue + ' ' + isHidden + ' == hidden');
+      var tmp = scrlPos + 150;
+      // console.log(tmp + ' >= ' + cssTopValue + ' ' + isHidden + ' == ishidden');
+      if(tmp >= cssTopValue && cssTopValue != 'NaN' && isHidden == 'hidden') {
+
         images[i].style.visibility = 'visible';
         if(fadeIn == 'yes'){
           if(images[i].style.opacity < 1) {
             scrlCtrl.fadeIn([images[i]]);
           }
         } 
-        scrollPosSave = scrlPos;
+        this.setScrollPosSave(cssTopValue);
       }
     }
   };
@@ -107,15 +108,23 @@ var ScrollController = function(requestResult, columnBuilder) {
       if(scrlPos >= cssTopValue && cssTopValue != 'NaN')
       {
         images[i].style.visibility = 'visible';
-        scrollPosSave = scrlPos;
+        this.setScrollPosSave(cssTopValue);
       }
     }
   };
 
 };
 
+ScrollController.prototype.getScrollPosSave = function () {
+  return this.scrollPosSave;
+};
+
+ScrollController.prototype.setScrollPosSave = function (scrollSave) {
+  this.scrollPosSave = scrollSave;
+};
+
 ScrollController.prototype.setController = function(galleryCtrl){
-  galleryCtrl = galleryCtrl;
+  this.galleryCtrl = galleryCtrl;
 };
 
 ScrollController.prototype.getGalleryController = function(){
@@ -142,14 +151,14 @@ ScrollController.prototype.handleScroll = function(columnBuilder, galleryCtrl, r
   var newScrollPos = scrlCtrl.innerWinHeight + window.pageYOffset;
 
   /* lazy loading: Adds images depending on the Users scrolling position */
-  if(newScrollPos > scrollPosSave){
-
+  if(newScrollPos > this.getScrollPosSave()){
+    // console.log('newscrlpo: ' + newScrollPos + ' old scrl pos: ' + this.getScrollPosSave());
     if(window.innerWidth > 767){
-      scrlCtrl.refreshScreenOnScroll(0, scrlCtrl);
+      scrlCtrl.refreshScreenOnScroll(150, scrlCtrl);
     } 
     else{
       if(window.innerWidth <= 768){
-        scrlCtrl.refreshScreenOnScroll(30, scrlCtrl);
+        scrlCtrl.refreshScreenOnScroll(300, scrlCtrl);
       }
     }
 
@@ -160,7 +169,7 @@ ScrollController.prototype.handleScroll = function(columnBuilder, galleryCtrl, r
     /* if the user scrolled down and not up && the user scrolled down more then 300 pixels*/
     scrlCtrl.timeoutId = setTimeout(function(){
       columnBuilder.addImgToColumn(scrlCtrl.names[columnBuilder.getTmpColumn()], newScrollPos, requestResult);
-      scrlCtrl.refreshScreenOnScroll(30, scrlCtrl);
+      scrlCtrl.refreshScreenOnScroll(300, scrlCtrl);
 
     }, 50);
     // end timeout

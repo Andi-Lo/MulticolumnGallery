@@ -128,11 +128,11 @@ var GalleryFactory = function () {
     request.onreadystatechange = function(){
       switch(request.readyState) {
         case REQUEST_PENDING:
-          console.log('pending');
+          // console.log('pending');
           document.getElementsByClassName('ajax-loading')[0].style.display = 'block';
           break;
         case REQUEST_SUCCESS:
-          console.log('success');
+          // console.log('success');
           document.getElementsByClassName('ajax-loading')[0].style.display = 'none';
       }
     };
@@ -144,7 +144,7 @@ var GalleryFactory = function () {
 
         /* Success! */
         var data = JSON.parse(request.responseText);
-        console.log(data);
+        // console.log(data);
         requestResult = data;
         colBuilder = new columnBuilder.ColumnBuilder(requestResult);
         this.columns = data.numOfColumns;
