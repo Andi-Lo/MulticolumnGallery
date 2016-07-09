@@ -6,7 +6,7 @@ MulticolumnGallery
 * [Gallery Example](#Gallery Example)
 * [Requirements](#Requirements)
 * [Setup](#Setup)
-* [Resizing Images](#Resize)
+* [Automatic Thumbnail creation](#Resize)
 * [Documentation](#Documentation)
 * [License](#License)
 
@@ -60,38 +60,36 @@ If you want a Lightbox (see http://dimsemenov.com/plugins/magnific-popup/ for mo
 ```
 
 Add the following div-box into your HTML document
+
 ```html
 <div id="gallery" class="popup-gallery">
 </div><!-- ./popup-gallery -->
-
 ```
-Customize your gallery through the config file placed in /config/config.json  
-See Section: Documentation for more Information on how to use the config file.  
-Add Images and Thumbnail into the appropriate folders: 
-* Image files dimensions should be 1600*1200 (better smaller) to increase performance.
+
+Customize your gallery through the config file placed in /config/config.json
+See Section: Documentation for more Information on how to use the config file.
+Add Images and Thumbnail into the appropriate folders:
+
+* Image files dimensions should be max 1600x1200 (better smaller) to increase performance.
 * Supported image formats are png, jpg.
 * Thumbnails can be named like this: yourPrefix_imagename, imagename_yourPostfix or a combination of both (e.g. prefix_img_postfix.jpg)
 * If you want to place your thumbnails in the same folder as your images, make sure they are pre or postfixed else its not working
-* If you place images and thumbnails in an seperat folder they do not need a pre or postfix.
+* If you place images and thumbnails in an seperat folder they do not need a pre or postfix. However if you do place them in the same folder you have to pre or postfix them.
 
-## <a name="resize"></a>Resizing Images
-When using a Unix system you can easily resize the images and create thumbnails on the fly with just one simple bash command provided by [ImageMagick](http://www.imagemagick.org/index.php). Normally Unix comes with ImageMagick already installed you can check this by typing `$ identify -version`. If you are familiar with **gulp** and **npm** you can use the gulp command "gulp resize" to resize images.
+## <a name="resize"></a>Automatic Thumbnail creation
 
-Make a backup of your images befor you run this command!
-If your pictures are in another file format, change *.jpg to the format you like e.g. *.png
-```bash
-$ mkdir images; ls *.jpg | xargs -r -I FILE   convert FILE -auto-orient -unsharp 0x0.5 -resize 1600x1200 -strip images/FILE && mkdir thumbs; ls *.jpg | xargs -r -I FILE   convert FILE -define jpeg:size=760x760 -auto-orient -thumbnail 300 -unsharp 0x0.5 -strip thumbs/thumb_FILE
-```
+On the first load the gallery checks if you have thumbnails for your pictures. If not it will automatically create them for you.
+You can chose the folder for where to place them by defining it in the config file.
+
 ## <a name="Documentation"></a>Documentation
-A short documentation for the config.json file:  
-```
+
+A short documentation for the config.json file:
+
+```json
 {
   "your_image_directory_path": "assets/images/",        // Your folder containing your images
 
-  "your_thumbnail_directory_path": "assets/thumbs/",    // Your folder containing the *thumbnails (*smaller
-                                                        // versions of your pictures)
-                                                        // Thumbnails can be placed in the same folder
-                                                        //   then your images if you pre or postfix them
+  "your_thumbnail_directory_path": "assets/thumbs/",    // Your folder containing the thumbnails
 
   "thumbnail_prefix": "thumb_",                         // Your prefix e.g thumb_myimage.jpg
 
@@ -114,19 +112,19 @@ A short documentation for the config.json file:
 
   "margin_bottom": "0",                                 // Add a margin to the bottom of your page
 
-  "center_column": "yes",                               // Yes / No, centeres the gallery if you have 5 columns
+  "center_column": "yes",                               // yes / no, centeres the gallery if you have 5 columns
 
-  "resize_columns": "yes",                              // Yes / No, disables responsive behavior
+  "resize_columns": "yes",                              // yes / no, disables responsive behavior
 
   "fade_in_pictures": "yes",                            // On scrolling down the page you get an fade in animation
                                                         // disalbe this option if you have performance issues.
 
-  "shuffle_pictures": "no",                             // Yes / No, Shuffles pictures to always display
+  "shuffle_pictures": "no",                             // yes / no, Shuffles pictures to always display
                                                         // different ones on page reload or if a user revisits 
-                                                        // your site. If value "No" is chosen the pictures are 
+                                                        // your site. If value "no" is chosen the pictures are 
                                                         // sorted by their names
 
-  "sort_pictures_after_date_taken": "yes"               // Yes / No If your pictures got metadata you can sort 
+  "sort_pictures_after_date_taken": "yes"               // yes / no If your pictures got metadata you can sort 
                                                         // your pictures by the date you took them.
                                                         // However if you optimized them for the web, your programm
                                                         // might have removed the metadata header and removed those
